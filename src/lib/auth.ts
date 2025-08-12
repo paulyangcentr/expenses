@@ -15,7 +15,8 @@ declare module 'next-auth' {
 }
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  // Temporarily disable adapter to avoid database connection issues
+  // adapter: PrismaAdapter(prisma),
   providers: [
     EmailProvider({
       server: {
@@ -48,6 +49,10 @@ export const authOptions: NextAuthOptions = {
         token.sub = user.id
       }
       return token
+    },
+    async signIn({ user, account, profile }) {
+      // Allow all sign-ins for now
+      return true
     },
   },
 }
