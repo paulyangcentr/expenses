@@ -5,10 +5,19 @@ import { prisma } from '@/lib/db'
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    // Demo mode - bypass authentication
+    const mockUserId = 'demo-user-id'
+    
+    // For demo mode, return mock data instead of database queries
+    const mockData = {
+      totalIncome: 8500,
+      totalSpend: 3200,
+      savingsRate: 62.4,
+      cashFlow: 5300,
+      monthlyAverage: 4800,
     }
+
+    return NextResponse.json(mockData)
 
     const now = new Date()
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)

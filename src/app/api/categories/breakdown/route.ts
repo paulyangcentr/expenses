@@ -5,59 +5,18 @@ import { prisma } from '@/lib/db'
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    // Demo mode - return mock category breakdown data
+    const mockData = {
+      categories: [
+        { name: 'Groceries', amount: 125.50, percentage: 39 },
+        { name: 'Transportation', amount: 45.00, percentage: 14 },
+        { name: 'Entertainment', amount: 89.99, percentage: 28 },
+        { name: 'Utilities', amount: 67.50, percentage: 21 },
+      ],
+      totalSpending: 327.99,
     }
 
-    const now = new Date()
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
-    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0)
-
-    // Get spending transactions for current month
-    const transactions = await prisma.transaction.findMany({
-      where: {
-        userId: session.user.id,
-        date: {
-          gte: startOfMonth,
-          lte: endOfMonth,
-        },
-        amount: {
-          lt: 0, // Only spending (negative amounts)
-        },
-        isTransfer: false,
-      },
-      include: {
-        category: true,
-      },
-    })
-
-    // Group by category
-    const categoryTotals = new Map<string, number>()
-    
-    transactions.forEach(transaction => {
-      const categoryName = transaction.category?.name || 'Uncategorized'
-      const current = categoryTotals.get(categoryName) || 0
-      categoryTotals.set(categoryName, current + Math.abs(transaction.amount))
-    })
-
-    // Calculate total spending
-    const totalSpending = Array.from(categoryTotals.values()).reduce((sum, amount) => sum + amount, 0)
-
-    // Convert to array and calculate percentages
-    const categories = Array.from(categoryTotals.entries()).map(([name, amount]) => ({
-      name,
-      amount: Math.round(amount * 100) / 100, // Round to 2 decimal places
-      percentage: totalSpending > 0 ? Math.round((amount / totalSpending) * 100) : 0,
-    }))
-
-    // Sort by amount descending
-    categories.sort((a, b) => b.amount - a.amount)
-
-    return NextResponse.json({
-      categories,
-      totalSpending,
-    })
+    return NextResponse.json(mockData)
 
   } catch (error) {
     console.error('Error fetching category breakdown:', error)

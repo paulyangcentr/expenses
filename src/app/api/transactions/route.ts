@@ -7,28 +7,69 @@ import { categorizeTransaction } from '@/lib/categorization'
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    // Demo mode - return mock transaction data
+    const mockTransactions = [
+      {
+        id: '1',
+        userId: 'demo-user-id',
+        accountId: 'demo-account-1',
+        date: new Date('2024-08-01'),
+        description: 'Grocery shopping',
+        merchant: 'Whole Foods',
+        amount: -125.50,
+        currency: 'USD',
+        categoryId: 'groceries',
+        tags: 'food,essential',
+        isTransfer: false,
+        notes: 'Weekly groceries',
+        createdAt: new Date('2024-08-01'),
+        updatedAt: new Date('2024-08-01'),
+        category: { id: 'groceries', name: 'Groceries', type: 'SPEND' },
+        account: { id: 'demo-account-1', name: 'Checking Account', type: 'CHECKING' }
+      },
+      {
+        id: '2',
+        userId: 'demo-user-id',
+        accountId: 'demo-account-1',
+        date: new Date('2024-08-02'),
+        description: 'Salary deposit',
+        merchant: 'Company Inc',
+        amount: 5000.00,
+        currency: 'USD',
+        categoryId: 'income',
+        tags: 'salary',
+        isTransfer: false,
+        notes: 'Monthly salary',
+        createdAt: new Date('2024-08-02'),
+        updatedAt: new Date('2024-08-02'),
+        category: { id: 'income', name: 'Income', type: 'SAVE' },
+        account: { id: 'demo-account-1', name: 'Checking Account', type: 'CHECKING' }
+      },
+      {
+        id: '3',
+        userId: 'demo-user-id',
+        accountId: 'demo-account-1',
+        date: new Date('2024-08-03'),
+        description: 'Gas station',
+        merchant: 'Shell',
+        amount: -45.00,
+        currency: 'USD',
+        categoryId: 'transportation',
+        tags: 'fuel',
+        isTransfer: false,
+        notes: 'Car fuel',
+        createdAt: new Date('2024-08-03'),
+        updatedAt: new Date('2024-08-03'),
+        category: { id: 'transportation', name: 'Transportation', type: 'SPEND' },
+        account: { id: 'demo-account-1', name: 'Checking Account', type: 'CHECKING' }
+      }
+    ]
 
     const { searchParams } = new URL(request.url)
     const limit = searchParams.get('limit')
     const limitNumber = limit ? parseInt(limit) : undefined
 
-    const transactions = await prisma.transaction.findMany({
-      where: {
-        userId: session.user.id,
-      },
-      include: {
-        category: true,
-        account: true,
-      },
-      orderBy: {
-        date: 'desc',
-      },
-      take: limitNumber,
-    })
+    const transactions = limitNumber ? mockTransactions.slice(0, limitNumber) : mockTransactions
 
     return NextResponse.json({
       transactions,

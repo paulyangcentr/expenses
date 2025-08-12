@@ -5,23 +5,15 @@ import { prisma } from '@/lib/db'
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    const accounts = await prisma.account.findMany({
-      where: {
-        userId: session.user.id,
-        isActive: true,
-      },
-      orderBy: {
-        name: 'asc',
-      },
-    })
+    // Demo mode - return mock accounts data
+    const mockAccounts = [
+      { id: 'demo-account-1', userId: 'demo-user-id', name: 'Checking Account', type: 'CHECKING', isActive: true },
+      { id: 'demo-account-2', userId: 'demo-user-id', name: 'Savings Account', type: 'SAVINGS', isActive: true },
+      { id: 'demo-account-3', userId: 'demo-user-id', name: 'Credit Card', type: 'CREDIT_CARD', isActive: true },
+    ]
 
     return NextResponse.json({
-      accounts,
+      accounts: mockAccounts,
     })
 
   } catch (error) {
