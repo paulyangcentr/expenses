@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useAuth } from '@/components/providers/firebase-auth-provider'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -12,14 +13,7 @@ import { CategoryBreakdown } from './category-breakdown'
 import { TransactionList } from './transaction-list'
 
 export function Dashboard() {
-  // Mock session for testing without authentication
-  const session = {
-    user: {
-      id: 'test-user-id',
-      email: 'paulyang1129@gmail.com',
-      name: 'Paul Yang'
-    }
-  }
+  const { user, signOut } = useAuth()
   const [activeTab, setActiveTab] = useState('overview')
 
   return (
@@ -32,10 +26,10 @@ export function Dashboard() {
               <h1 className="text-xl font-semibold text-gray-900">Expenses Tracker v1.2</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-700">{session?.user?.email}</span>
-              <Button variant="outline" size="sm" disabled>
+              <span className="text-sm text-gray-700">{user?.email}</span>
+              <Button variant="outline" size="sm" onClick={() => signOut()}>
                 <LogOut className="h-4 w-4 mr-2" />
-                Demo Mode
+                Sign Out
               </Button>
             </div>
           </div>
