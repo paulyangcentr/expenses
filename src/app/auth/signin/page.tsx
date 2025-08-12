@@ -28,7 +28,7 @@ export default function SignInPage() {
       } else {
         toast.success('Check your email for the sign-in link!')
       }
-    } catch (error) {
+    } catch {
       toast.error('An error occurred')
     } finally {
       setIsLoading(false)
