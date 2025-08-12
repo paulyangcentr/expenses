@@ -14,7 +14,7 @@ export default function VerifyRequestPage() {
         </CardHeader>
         <CardContent className="text-center space-y-4">
           <p className="text-sm text-gray-600">
-            If you don't see it, check your spam folder. The link will expire in 24 hours.
+            If you don&apos;t see it, check your spam folder. The link will expire in 24 hours.
           </p>
           <Link href="/auth/signin">
             <Button variant="outline">Back to Sign In</Button>

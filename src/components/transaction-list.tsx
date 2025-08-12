@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
 import { format } from 'date-fns'
@@ -30,11 +30,7 @@ export function TransactionList({ limit }: TransactionListProps) {
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    fetchTransactions()
-  }, [limit])
-
-  const fetchTransactions = async () => {
+  const fetchTransactions = useCallback(async () => {
     try {
       const url = limit 
         ? `/api/transactions?limit=${limit}`
@@ -50,7 +46,11 @@ export function TransactionList({ limit }: TransactionListProps) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [limit])
+
+  useEffect(() => {
+    fetchTransactions()
+  }, [fetchTransactions])
 
   if (loading) {
     return (

@@ -29,7 +29,7 @@ export async function parseCSV(csvContent: string): Promise<ParsedTransaction[]>
 
       for (const record of records) {
         try {
-          const parsed = parseTransactionRecord(record)
+          const parsed = parseTransactionRecord(record as Record<string, string>)
           results.push(parsed)
         } catch (error) {
           console.warn('Failed to parse record:', record, error)
@@ -42,7 +42,7 @@ export async function parseCSV(csvContent: string): Promise<ParsedTransaction[]>
   })
 }
 
-function parseTransactionRecord(record: any): ParsedTransaction {
+function parseTransactionRecord(record: Record<string, string>): ParsedTransaction {
   // Validate the record structure
   const validated = csvTransactionSchema.parse(record)
 
@@ -148,7 +148,7 @@ function parseAmount(amountString: string): number {
 
 export function detectDuplicates(
   transactions: ParsedTransaction[],
-  existingTransactions: any[]
+  existingTransactions: Array<{ id: string; date: Date; amount: number; merchant: string | null; externalId?: string | null }>
 ): { isDuplicate: boolean; confidence: number; existingId?: string }[] {
   return transactions.map(transaction => {
     const duplicates = existingTransactions.filter(existing => {

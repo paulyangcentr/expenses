@@ -11,6 +11,19 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { toast } from 'sonner'
 import { transactionSchema } from '@/lib/validations'
 
+type TransactionFormData = {
+  date: Date
+  description: string
+  merchant?: string
+  amount: number
+  currency: string
+  accountId: string
+  categoryId?: string
+  isTransfer: boolean
+  tags: string[]
+  notes?: string
+}
+
 interface Account {
   id: string
   name: string
@@ -35,7 +48,7 @@ export function TransactionForm() {
   } = useForm({
     resolver: zodResolver(transactionSchema),
     defaultValues: {
-      date: new Date().toISOString().split('T')[0],
+      date: new Date(),
       currency: 'USD',
       isTransfer: false,
       tags: [],
@@ -67,7 +80,7 @@ export function TransactionForm() {
     }
   }
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: TransactionFormData) => {
     setIsSubmitting(true)
     try {
       const response = await fetch('/api/transactions', {

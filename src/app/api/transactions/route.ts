@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
         validatedData.amount,
         validatedData.accountId
       )
-      categoryId = categorization?.categoryId || null
+      categoryId = categorization?.categoryId || undefined
     }
 
     const transaction = await prisma.transaction.create({
@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
         amount: validatedData.amount,
         currency: validatedData.currency || 'USD',
         categoryId,
-        tags: validatedData.tags || [],
+        tags: (validatedData.tags || []).join(','),
         isTransfer: validatedData.isTransfer || false,
         notes: validatedData.notes,
       },

@@ -1,5 +1,4 @@
 import { prisma } from './db'
-import { MatchType } from '@prisma/client'
 
 export interface CategorizationResult {
   categoryId: string
@@ -53,7 +52,7 @@ export async function categorizeTransaction(
 }
 
 function matchesRule(
-  rule: any,
+  rule: { matchType: string; pattern: string },
   description: string,
   merchant: string | null,
   amount: number,
@@ -109,7 +108,7 @@ async function getMerchantCategory(merchant: string | null): Promise<string | nu
     if (lowerMerchant.includes(pattern)) {
       // Find the category ID by name
       const categoryRecord = await prisma.category.findFirst({
-        where: { name: { equals: category, mode: 'insensitive' } }
+        where: { name: category }
       })
       return categoryRecord?.id ?? null
     }
@@ -161,7 +160,7 @@ async function getKeywordCategory(description: string): Promise<string | null> {
   for (const [keyword, category] of Object.entries(keywordMap)) {
     if (lowerDescription.includes(keyword)) {
       const categoryRecord = await prisma.category.findFirst({
-        where: { name: { equals: category, mode: 'insensitive' } }
+        where: { name: category }
       })
       return categoryRecord?.id ?? null
     }
