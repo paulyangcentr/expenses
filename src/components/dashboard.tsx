@@ -13,7 +13,14 @@ import { CategoryBreakdown } from './category-breakdown'
 import { TransactionList } from './transaction-list'
 
 export function Dashboard() {
-  const { data: session } = useSession()
+  // Mock session for testing without authentication
+  const session = {
+    user: {
+      id: 'test-user-id',
+      email: 'paulyang1129@gmail.com',
+      name: 'Paul Yang'
+    }
+  }
   const [activeTab, setActiveTab] = useState('overview')
 
   return (
@@ -27,9 +34,9 @@ export function Dashboard() {
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-700">{session?.user?.email}</span>
-              <Button variant="outline" size="sm" onClick={() => signOut()}>
+              <Button variant="outline" size="sm" disabled>
                 <LogOut className="h-4 w-4 mr-2" />
-                Sign Out
+                Demo Mode
               </Button>
             </div>
           </div>
