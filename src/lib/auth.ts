@@ -15,7 +15,8 @@ declare module 'next-auth' {
 }
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  // Temporarily disable adapter until database is properly configured
+  // adapter: PrismaAdapter(prisma),
   providers: [
     EmailProvider({
       server: {
