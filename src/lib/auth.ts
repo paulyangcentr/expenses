@@ -21,13 +21,26 @@ export const authOptions: NextAuthOptions = {
     EmailProvider({
       server: {
         host: process.env.EMAIL_SERVER_HOST,
-        port: process.env.EMAIL_SERVER_PORT,
+        port: Number(process.env.EMAIL_SERVER_PORT),
         auth: {
           user: process.env.EMAIL_SERVER_USER,
           pass: process.env.EMAIL_SERVER_PASSWORD,
         },
+        secure: false, // For development
+        tls: {
+          rejectUnauthorized: false
+        }
       },
       from: process.env.EMAIL_SERVER_USER,
+      sendVerificationRequest: async ({ identifier, url, provider }) => {
+        console.log('Sending verification email to:', identifier)
+        console.log('Verification URL:', url)
+        
+        // For now, just log the URL instead of sending email
+        // This allows testing without email setup
+        console.log('Email would be sent to:', identifier)
+        console.log('With URL:', url)
+      }
     }),
   ],
   session: {
