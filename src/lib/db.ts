@@ -13,13 +13,15 @@ export const prisma = globalForPrisma.prisma ?? new PrismaClient({
   },
 })
 
-// Test database connection
-prisma.$connect()
-  .then(() => {
-    console.log('✅ Database connected successfully')
-  })
-  .catch((error) => {
-    console.error('❌ Database connection failed:', error.message)
-  })
+// Only test connection in development
+if (process.env.NODE_ENV === 'development') {
+  prisma.$connect()
+    .then(() => {
+      console.log('✅ Database connected successfully')
+    })
+    .catch((error) => {
+      console.error('❌ Database connection failed:', error.message)
+    })
+}
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
