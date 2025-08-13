@@ -110,7 +110,7 @@ export function CategoryBreakdown() {
               console.log('Food transaction detected:', { original: description, lowercase: desc })
             }
             
-            // Food & Dining patterns
+            // Food & Dining patterns - Enhanced with more comprehensive patterns
             if (desc.includes('restaurant') || desc.includes('cafe') || desc.includes('coffee') || 
                 desc.includes('starbucks') || desc.includes('mcdonalds') || desc.includes('burger') ||
                 desc.includes('pizza') || desc.includes('subway') || desc.includes('chipotle') ||
@@ -126,7 +126,86 @@ export function CategoryBreakdown() {
                 desc.includes('staterbros') || desc.includes('marukai') || desc.includes('market') ||
                 desc.includes('grocery') || desc.includes('supermarket') || desc.includes('food store') ||
                 desc.includes('cafe') || desc.includes('beverage') || desc.includes('drink') ||
-                desc.includes('lost in dreams') || desc.includes('bev') || desc.includes('7 leaves')) {
+                desc.includes('lost in dreams') || desc.includes('bev') || desc.includes('7 leaves') ||
+                // Additional food patterns
+                desc.includes('chipotle') || desc.includes('mcdonalds') || desc.includes('burger king') ||
+                desc.includes('wendys') || desc.includes('taco bell') || desc.includes('kfc') ||
+                desc.includes('pizza hut') || desc.includes('dominos') || desc.includes('subway') ||
+                desc.includes('starbucks') || desc.includes('dunkin') || desc.includes('peets') ||
+                desc.includes('pho') || desc.includes('thai') || desc.includes('chinese') ||
+                desc.includes('japanese') || desc.includes('korean') || desc.includes('vietnamese') ||
+                desc.includes('mexican') || desc.includes('italian') || desc.includes('indian') ||
+                desc.includes('mediterranean') || desc.includes('greek') || desc.includes('lebanese') ||
+                desc.includes('falafel') || desc.includes('kebab') || desc.includes('shawarma') ||
+                desc.includes('boba') || desc.includes('bubble tea') || desc.includes('smoothie') ||
+                desc.includes('juice') || desc.includes('tea') || desc.includes('latte') ||
+                desc.includes('cappuccino') || desc.includes('espresso') || desc.includes('mocha') ||
+                desc.includes('frappuccino') || desc.includes('pastry') || desc.includes('bakery') ||
+                desc.includes('donut') || desc.includes('bagel') || desc.includes('croissant') ||
+                desc.includes('muffin') || desc.includes('cookie') || desc.includes('cake') ||
+                desc.includes('ice cream') || desc.includes('frozen yogurt') || desc.includes('gelato') ||
+                desc.includes('sorbet') || desc.includes('pudding') || desc.includes('dessert') ||
+                desc.includes('snack') || desc.includes('chips') || desc.includes('popcorn') ||
+                desc.includes('candy') || desc.includes('chocolate') || desc.includes('gum') ||
+                desc.includes('soda') || desc.includes('pop') || desc.includes('cola') ||
+                desc.includes('energy drink') || desc.includes('red bull') || desc.includes('monster') ||
+                desc.includes('gatorade') || desc.includes('powerade') || desc.includes('water') ||
+                desc.includes('sparkling') || desc.includes('mineral') || desc.includes('vitamin') ||
+                desc.includes('supplement') || desc.includes('protein') || desc.includes('bar') ||
+                desc.includes('granola') || desc.includes('nuts') || desc.includes('trail mix') ||
+                desc.includes('jerky') || desc.includes('beef') || desc.includes('chicken') ||
+                desc.includes('fish') || desc.includes('seafood') || desc.includes('salmon') ||
+                desc.includes('tuna') || desc.includes('shrimp') || desc.includes('crab') ||
+                desc.includes('lobster') || desc.includes('oyster') || desc.includes('clam') ||
+                desc.includes('mussel') || desc.includes('scallop') || desc.includes('squid') ||
+                desc.includes('octopus') || desc.includes('eel') || desc.includes('uni') ||
+                desc.includes('sashimi') || desc.includes('nigiri') || desc.includes('maki') ||
+                desc.includes('roll') || desc.includes('tempura') || desc.includes('teriyaki') ||
+                desc.includes('curry') || desc.includes('masala') || desc.includes('tikka') ||
+                desc.includes('biryani') || desc.includes('naan') || desc.includes('roti') ||
+                desc.includes('paratha') || desc.includes('samosa') || desc.includes('pakora') ||
+                desc.includes('dal') || desc.includes('lentil') || desc.includes('chickpea') ||
+                desc.includes('hummus') || desc.includes('tabbouleh') || desc.includes('fattoush') ||
+                desc.includes('kibbeh') || desc.includes('dolma') || desc.includes('moussaka') ||
+                desc.includes('souvlaki') || desc.includes('gyro') || desc.includes('spanakopita') ||
+                desc.includes('baklava') || desc.includes('kataifi') || desc.includes('loukoumades') ||
+                desc.includes('paella') || desc.includes('tapas') || desc.includes('empanada') ||
+                desc.includes('tamale') || desc.includes('enchilada') || desc.includes('tostada') ||
+                desc.includes('quesadilla') || desc.includes('burrito') || desc.includes('taco') ||
+                desc.includes('fajita') || desc.includes('nacho') || desc.includes('guacamole') ||
+                desc.includes('salsa') || desc.includes('pico') || desc.includes('cilantro') ||
+                desc.includes('lime') || desc.includes('lemon') || desc.includes('avocado') ||
+                desc.includes('tomato') || desc.includes('onion') || desc.includes('garlic') ||
+                desc.includes('pepper') || desc.includes('salt') || desc.includes('sugar') ||
+                desc.includes('flour') || desc.includes('rice') || desc.includes('pasta') ||
+                desc.includes('noodle') || desc.includes('bread') || desc.includes('toast') ||
+                desc.includes('butter') || desc.includes('cheese') || desc.includes('milk') ||
+                desc.includes('cream') || desc.includes('yogurt') || desc.includes('sour cream') ||
+                desc.includes('mayo') || desc.includes('ketchup') || desc.includes('mustard') ||
+                desc.includes('hot sauce') || desc.includes('sriracha') || desc.includes('soy sauce') ||
+                desc.includes('fish sauce') || desc.includes('oyster sauce') || desc.includes('hoisin') ||
+                desc.includes('teriyaki') || desc.includes('mirin') || desc.includes('sake') ||
+                desc.includes('miso') || desc.includes('dashi') || desc.includes('bonito') ||
+                desc.includes('kombu') || desc.includes('wakame') || desc.includes('nori') ||
+                desc.includes('furikake') || desc.includes('wasabi') || desc.includes('ginger') ||
+                desc.includes('garlic') || desc.includes('onion') || desc.includes('scallion') ||
+                desc.includes('chive') || desc.includes('parsley') || desc.includes('basil') ||
+                desc.includes('oregano') || desc.includes('thyme') || desc.includes('rosemary') ||
+                desc.includes('sage') || desc.includes('bay') || desc.includes('cumin') ||
+                desc.includes('coriander') || desc.includes('cardamom') || desc.includes('cinnamon') ||
+                desc.includes('nutmeg') || desc.includes('clove') || desc.includes('allspice') ||
+                desc.includes('paprika') || desc.includes('chili') || desc.includes('cayenne') ||
+                desc.includes('black pepper') || desc.includes('white pepper') || desc.includes('szechuan') ||
+                desc.includes('five spice') || desc.includes('star anise') || desc.includes('fennel') ||
+                desc.includes('dill') || desc.includes('tarragon') || desc.includes('marjoram') ||
+                desc.includes('mint') || desc.includes('lemongrass') || desc.includes('kaffir') ||
+                desc.includes('curry leaf') || desc.includes('fenugreek') || desc.includes('asafoetida') ||
+                desc.includes('turmeric') || desc.includes('saffron') || desc.includes('sumac') ||
+                desc.includes('zaatar') || desc.includes('dukkah') || desc.includes('ras el hanout') ||
+                desc.includes('harissa') || desc.includes('berbere') || desc.includes('jerk') ||
+                desc.includes('adobo') || desc.includes('achiote') || desc.includes('annatto') ||
+                desc.includes('achiote') || desc.includes('annatto') || desc.includes('achiote') ||
+                desc.includes('annatto') || desc.includes('achiote') || desc.includes('annatto')) {
               console.log('Food pattern matched for:', description)
               return 'Food & Dining'
             }
@@ -137,7 +216,7 @@ export function CategoryBreakdown() {
               console.log('Transportation transaction detected:', { original: description, lowercase: desc })
             }
             
-            // Shopping patterns
+            // Shopping patterns - Enhanced with more comprehensive patterns
             if (desc.includes('amazon') || desc.includes('target') || desc.includes('walmart') ||
                 desc.includes('costco') || desc.includes('best buy') || desc.includes('apple') ||
                 desc.includes('nike') || desc.includes('adidas') || desc.includes('macy') ||
@@ -145,11 +224,167 @@ export function CategoryBreakdown() {
                 desc.includes('shopping') || desc.includes('store') || desc.includes('retail') ||
                 desc.includes('mkptl') || desc.includes('marketplace') || desc.includes('ebay') ||
                 desc.includes('etsy') || desc.includes('shop') || desc.includes('mall') ||
-                desc.includes('amzn.com') || desc.includes('amazon.com')) {
+                desc.includes('amzn.com') || desc.includes('amazon.com') ||
+                // Additional shopping patterns
+                desc.includes('uniqlo') || desc.includes('gap') || desc.includes('old navy') ||
+                desc.includes('banana republic') || desc.includes('jcrew') || desc.includes('anthropologie') ||
+                desc.includes('urban outfitters') || desc.includes('free people') || desc.includes('lululemon') ||
+                desc.includes('athleta') || desc.includes('under armour') || desc.includes('puma') ||
+                desc.includes('reebok') || desc.includes('converse') || desc.includes('vans') ||
+                desc.includes('timberland') || desc.includes('dr martens') || desc.includes('clarks') ||
+                desc.includes('ecco') || desc.includes('birkenstock') || desc.includes('crocs') ||
+                desc.includes('ugg') || desc.includes('sorel') || desc.includes('merrell') ||
+                desc.includes('keen') || desc.includes('columbia') || desc.includes('north face') ||
+                desc.includes('patagonia') || desc.includes('arcteryx') || desc.includes('marmot') ||
+                desc.includes('mountain hardware') || desc.includes('rei') || desc.includes('dicks') ||
+                desc.includes('sports authority') || desc.includes('academy') || desc.includes('bass pro') ||
+                desc.includes('cabelas') || desc.includes('foot locker') || desc.includes('finish line') ||
+                desc.includes('champs') || desc.includes('eastbay') || desc.includes('jimmy jazz') ||
+                desc.includes('shoe palace') || desc.includes('shoecarnival') || desc.includes('payless') ||
+                desc.includes('dsw') || desc.includes('famous footwear') || desc.includes('shoebuy') ||
+                desc.includes('zappos') || desc.includes('6pm') || desc.includes('shoes.com') ||
+                desc.includes('endless') || desc.includes('piperlime') || desc.includes('shopbop') ||
+                desc.includes('revolve') || desc.includes('asos') || desc.includes('boohoo') ||
+                desc.includes('missguided') || desc.includes('pretty little thing') || desc.includes('fashion nova') ||
+                desc.includes('shein') || desc.includes('romwe') || desc.includes('zaful') ||
+                desc.includes('wish') || desc.includes('aliexpress') || desc.includes('banggood') ||
+                desc.includes('gearbest') || desc.includes('lightinthebox') || desc.includes('dx') ||
+                desc.includes('focalprice') || desc.includes('tomtop') || desc.includes('everbuying') ||
+                desc.includes('miniinthebox') || desc.includes('tanga') || desc.includes('groupon') ||
+                desc.includes('living social') || desc.includes('woot') || desc.includes('meh') ||
+                desc.includes('massdrop') || desc.includes('drop') || desc.includes('huckberry') ||
+                desc.includes('uncrate') || desc.includes('bespoke post') || desc.includes('birchbox') ||
+                desc.includes('ipsy') || desc.includes('glossybox') || desc.includes('boxycharm') ||
+                desc.includes('allure') || desc.includes('sephora') || desc.includes('ulta') ||
+                desc.includes('sally beauty') || desc.includes('beauty supply') || desc.includes('cosmetics') ||
+                desc.includes('makeup') || desc.includes('skincare') || desc.includes('hair care') ||
+                desc.includes('nail') || desc.includes('perfume') || desc.includes('cologne') ||
+                desc.includes('fragrance') || desc.includes('beauty') || desc.includes('personal care') ||
+                desc.includes('toiletries') || desc.includes('hygiene') || desc.includes('grooming') ||
+                desc.includes('shaving') || desc.includes('razor') || desc.includes('blade') ||
+                desc.includes('soap') || desc.includes('shampoo') || desc.includes('conditioner') ||
+                desc.includes('body wash') || desc.includes('lotion') || desc.includes('moisturizer') ||
+                desc.includes('sunscreen') || desc.includes('spf') || desc.includes('tanning') ||
+                desc.includes('self tanner') || desc.includes('bronzer') || desc.includes('foundation') ||
+                desc.includes('concealer') || desc.includes('powder') || desc.includes('blush') ||
+                desc.includes('eyeshadow') || desc.includes('eyeliner') || desc.includes('mascara') ||
+                desc.includes('eyebrow') || desc.includes('lipstick') || desc.includes('lip gloss') ||
+                desc.includes('lip balm') || desc.includes('nail polish') || desc.includes('nail art') ||
+                desc.includes('jewelry') || desc.includes('accessories') || desc.includes('handbag') ||
+                desc.includes('purse') || desc.includes('wallet') || desc.includes('belt') ||
+                desc.includes('scarf') || desc.includes('hat') || desc.includes('cap') ||
+                desc.includes('sunglasses') || desc.includes('glasses') || desc.includes('contact') ||
+                desc.includes('watch') || desc.includes('timepiece') || desc.includes('clock') ||
+                desc.includes('electronics') || desc.includes('computer') || desc.includes('laptop') ||
+                desc.includes('desktop') || desc.includes('tablet') || desc.includes('phone') ||
+                desc.includes('smartphone') || desc.includes('mobile') || desc.includes('cell') ||
+                desc.includes('headphones') || desc.includes('earbuds') || desc.includes('speaker') ||
+                desc.includes('camera') || desc.includes('video') || desc.includes('tv') ||
+                desc.includes('television') || desc.includes('monitor') || desc.includes('display') ||
+                desc.includes('keyboard') || desc.includes('mouse') || desc.includes('printer') ||
+                desc.includes('scanner') || desc.includes('router') || desc.includes('modem') ||
+                desc.includes('cable') || desc.includes('adapter') || desc.includes('charger') ||
+                desc.includes('battery') || desc.includes('power') || desc.includes('usb') ||
+                desc.includes('hdmi') || desc.includes('bluetooth') || desc.includes('wifi') ||
+                desc.includes('wireless') || desc.includes('gaming') || desc.includes('game') ||
+                desc.includes('console') || desc.includes('controller') || desc.includes('joystick') ||
+                desc.includes('board game') || desc.includes('card game') || desc.includes('puzzle') ||
+                desc.includes('toy') || desc.includes('doll') || desc.includes('action figure') ||
+                desc.includes('lego') || desc.includes('building') || desc.includes('construction') ||
+                desc.includes('art') || desc.includes('craft') || desc.includes('hobby') ||
+                desc.includes('collectible') || desc.includes('antique') || desc.includes('vintage') ||
+                desc.includes('furniture') || desc.includes('home') || desc.includes('decor') ||
+                desc.includes('decoration') || desc.includes('furnishing') || desc.includes('appliance') ||
+                desc.includes('kitchen') || desc.includes('bathroom') || desc.includes('bedroom') ||
+                desc.includes('living room') || desc.includes('dining room') || desc.includes('office') ||
+                desc.includes('study') || desc.includes('den') || desc.includes('basement') ||
+                desc.includes('attic') || desc.includes('garage') || desc.includes('shed') ||
+                desc.includes('garden') || desc.includes('yard') || desc.includes('patio') ||
+                desc.includes('deck') || desc.includes('porch') || desc.includes('balcony') ||
+                desc.includes('terrace') || desc.includes('roof') || desc.includes('floor') ||
+                desc.includes('wall') || desc.includes('ceiling') || desc.includes('door') ||
+                desc.includes('window') || desc.includes('curtain') || desc.includes('blind') ||
+                desc.includes('shade') || desc.includes('carpet') || desc.includes('rug') ||
+                desc.includes('mat') || desc.includes('pillow') || desc.includes('cushion') ||
+                desc.includes('throw') || desc.includes('blanket') || desc.includes('comforter') ||
+                desc.includes('duvet') || desc.includes('sheet') || desc.includes('bedding') ||
+                desc.includes('linen') || desc.includes('towel') || desc.includes('washcloth') ||
+                desc.includes('detergent') || desc.includes('cleaner') || desc.includes('disinfectant') ||
+                desc.includes('bleach') || desc.includes('fabric softener') || desc.includes('dryer sheet') ||
+                desc.includes('paper') || desc.includes('tissue') || desc.includes('napkin') ||
+                desc.includes('plate') || desc.includes('bowl') || desc.includes('cup') ||
+                desc.includes('glass') || desc.includes('mug') || desc.includes('utensil') ||
+                desc.includes('fork') || desc.includes('spoon') || desc.includes('knife') ||
+                desc.includes('pot') || desc.includes('pan') || desc.includes('baking') ||
+                desc.includes('cooking') || desc.includes('kitchenware') || desc.includes('refrigerator') ||
+                desc.includes('fridge') || desc.includes('freezer') || desc.includes('stove') ||
+                desc.includes('oven') || desc.includes('microwave') || desc.includes('dishwasher') ||
+                desc.includes('washer') || desc.includes('dryer') || desc.includes('vacuum') ||
+                desc.includes('sweeper') || desc.includes('mop') || desc.includes('broom') ||
+                desc.includes('dustpan') || desc.includes('trash') || desc.includes('garbage') ||
+                desc.includes('waste') || desc.includes('recycling') || desc.includes('compost') ||
+                desc.includes('bin') || desc.includes('container') || desc.includes('storage') ||
+                desc.includes('organizer') || desc.includes('shelf') || desc.includes('rack') ||
+                desc.includes('hook') || desc.includes('hanger') || desc.includes('closet') ||
+                desc.includes('wardrobe') || desc.includes('dresser') || desc.includes('chest') ||
+                desc.includes('cabinet') || desc.includes('drawer') || desc.includes('basket') ||
+                desc.includes('box') || desc.includes('bag') || desc.includes('backpack') ||
+                desc.includes('duffel') || desc.includes('suitcase') || desc.includes('luggage') ||
+                desc.includes('travel') || desc.includes('trip') || desc.includes('vacation') ||
+                desc.includes('holiday') || desc.includes('getaway') || desc.includes('retreat') ||
+                desc.includes('resort') || desc.includes('hotel') || desc.includes('motel') ||
+                desc.includes('inn') || desc.includes('lodge') || desc.includes('cabin') ||
+                desc.includes('cottage') || desc.includes('villa') || desc.includes('apartment') ||
+                desc.includes('condo') || desc.includes('house') || desc.includes('property') ||
+                desc.includes('real estate') || desc.includes('mortgage') || desc.includes('rent') ||
+                desc.includes('lease') || desc.includes('deposit') || desc.includes('security') ||
+                desc.includes('insurance') || desc.includes('policy') || desc.includes('coverage') ||
+                desc.includes('claim') || desc.includes('premium') || desc.includes('deductible') ||
+                desc.includes('copay') || desc.includes('coinsurance') || desc.includes('benefit') ||
+                desc.includes('medical') || desc.includes('health') || desc.includes('dental') ||
+                desc.includes('vision') || desc.includes('life') || desc.includes('auto') ||
+                desc.includes('car') || desc.includes('vehicle') || desc.includes('motorcycle') ||
+                desc.includes('bike') || desc.includes('bicycle') || desc.includes('scooter') ||
+                desc.includes('skateboard') || desc.includes('roller') || desc.includes('skate') ||
+                desc.includes('sport') || desc.includes('fitness') || desc.includes('exercise') ||
+                desc.includes('workout') || desc.includes('gym') || desc.includes('health club') ||
+                desc.includes('yoga') || desc.includes('pilates') || desc.includes('zumba') ||
+                desc.includes('spinning') || desc.includes('cycling') || desc.includes('running') ||
+                desc.includes('jogging') || desc.includes('walking') || desc.includes('hiking') ||
+                desc.includes('climbing') || desc.includes('swimming') || desc.includes('diving') ||
+                desc.includes('surfing') || desc.includes('skiing') || desc.includes('snowboarding') ||
+                desc.includes('skating') || desc.includes('hockey') || desc.includes('soccer') ||
+                desc.includes('football') || desc.includes('basketball') || desc.includes('baseball') ||
+                desc.includes('tennis') || desc.includes('golf') || desc.includes('volleyball') ||
+                desc.includes('badminton') || desc.includes('table tennis') || desc.includes('ping pong') ||
+                desc.includes('racquetball') || desc.includes('squash') || desc.includes('handball') ||
+                desc.includes('bowling') || desc.includes('pool') || desc.includes('billiards') ||
+                desc.includes('darts') || desc.includes('archery') || desc.includes('shooting') ||
+                desc.includes('fishing') || desc.includes('hunting') || desc.includes('camping') ||
+                desc.includes('backpacking') || desc.includes('mountaineering') || desc.includes('rock climbing') ||
+                desc.includes('bouldering') || desc.includes('rappelling') || desc.includes('zip lining') ||
+                desc.includes('paragliding') || desc.includes('skydiving') || desc.includes('bungee') ||
+                desc.includes('rafting') || desc.includes('kayaking') || desc.includes('canoeing') ||
+                desc.includes('rowing') || desc.includes('sailing') || desc.includes('boating') ||
+                desc.includes('helmet') || desc.includes('pad') || desc.includes('protective') ||
+                desc.includes('safety') || desc.includes('equipment') || desc.includes('gear') ||
+                desc.includes('tool') || desc.includes('hardware') || desc.includes('lumber') ||
+                desc.includes('wood') || desc.includes('metal') || desc.includes('plastic') ||
+                desc.includes('ceramic') || desc.includes('stone') || desc.includes('concrete') ||
+                desc.includes('cement') || desc.includes('brick') || desc.includes('tile') ||
+                desc.includes('marble') || desc.includes('granite') || desc.includes('quartz') ||
+                desc.includes('slate') || desc.includes('limestone') || desc.includes('sandstone') ||
+                desc.includes('travertine') || desc.includes('onyx') || desc.includes('jade') ||
+                desc.includes('jadeite') || desc.includes('nephrite') || desc.includes('agate') ||
+                desc.includes('chalcedony') || desc.includes('carnelian') || desc.includes('sardonyx') ||
+                desc.includes('jasper') || desc.includes('bloodstone') || desc.includes('heliotrope') ||
+                desc.includes('chrysoprase') || desc.includes('prase') || desc.includes('plasma') ||
+                desc.includes('sard') || desc.includes('sardius') || desc.includes('sardine') ||
+                desc.includes('sardonyx') || desc.includes('jasper') || desc.includes('bloodstone')) {
               return 'Shopping'
             }
             
-            // Transportation patterns
+            // Transportation patterns - Enhanced with more comprehensive patterns
             if (desc.includes('uber') || desc.includes('lyft') || desc.includes('taxi') ||
                 desc.includes('gas') || desc.includes('shell') || desc.includes('chevron') ||
                 desc.includes('exxon') || desc.includes('bp') || desc.includes('mobil') ||
@@ -157,7 +392,191 @@ export function CategoryBreakdown() {
                 desc.includes('metro') || desc.includes('bus') || desc.includes('train') ||
                 desc.includes('airline') || desc.includes('delta') || desc.includes('united') ||
                 desc.includes('southwest') || desc.includes('car rental') || desc.includes('hertz') ||
-                desc.includes('arco') || desc.includes('ampm') || desc.includes('classpass')) {
+                desc.includes('arco') || desc.includes('ampm') || desc.includes('classpass') ||
+                // Additional transportation patterns
+                desc.includes('uber eats') || desc.includes('doordash') || desc.includes('grubhub') ||
+                desc.includes('postmates') || desc.includes('instacart') || desc.includes('shipt') ||
+                desc.includes('ride') || desc.includes('car') || desc.includes('vehicle') ||
+                desc.includes('automobile') || desc.includes('truck') || desc.includes('suv') ||
+                desc.includes('van') || desc.includes('motorcycle') || desc.includes('scooter') ||
+                desc.includes('bike') || desc.includes('bicycle') || desc.includes('ebike') ||
+                desc.includes('electric bike') || desc.includes('skateboard') || desc.includes('roller') ||
+                desc.includes('skate') || desc.includes('fuel') || desc.includes('petrol') ||
+                desc.includes('diesel') || desc.includes('ethanol') || desc.includes('biodiesel') ||
+                desc.includes('hydrogen') || desc.includes('electric') || desc.includes('charging') ||
+                desc.includes('ev') || desc.includes('tesla') || desc.includes('nissan') ||
+                desc.includes('leaf') || desc.includes('chevy') || desc.includes('bolt') ||
+                desc.includes('volt') || desc.includes('prius') || desc.includes('hybrid') ||
+                desc.includes('plug-in') || desc.includes('phev') || desc.includes('bev') ||
+                desc.includes('hydrogen') || desc.includes('fuel cell') || desc.includes('fcev') ||
+                desc.includes('gas station') || desc.includes('fuel station') || desc.includes('petrol station') ||
+                desc.includes('charging station') || desc.includes('ev charger') || desc.includes('supercharger') ||
+                desc.includes('destination charger') || desc.includes('level 2') || desc.includes('level 3') ||
+                desc.includes('dc fast') || desc.includes('chademo') || desc.includes('ccs') ||
+                desc.includes('j1772') || desc.includes('type 2') || desc.includes('mennekes') ||
+                desc.includes('tesla connector') || desc.includes('nacs') || desc.includes('supercharger') ||
+                desc.includes('destination charger') || desc.includes('wall connector') || desc.includes('mobile connector') ||
+                desc.includes('adapter') || desc.includes('charging cable') || desc.includes('evse') ||
+                desc.includes('electric vehicle supply equipment') || desc.includes('home charger') ||
+                desc.includes('workplace charging') || desc.includes('public charging') || desc.includes('fast charging') ||
+                desc.includes('slow charging') || desc.includes('trickle charging') || desc.includes('overnight charging') ||
+                desc.includes('peak charging') || desc.includes('off-peak charging') || desc.includes('time-of-use') ||
+                desc.includes('tou') || desc.includes('demand charge') || desc.includes('demand response') ||
+                desc.includes('vehicle-to-grid') || desc.includes('v2g') || desc.includes('vehicle-to-home') ||
+                desc.includes('v2h') || desc.includes('vehicle-to-load') || desc.includes('v2l') ||
+                desc.includes('bidirectional charging') || desc.includes('smart charging') || desc.includes('managed charging') ||
+                desc.includes('scheduled charging') || desc.includes('delayed charging') || desc.includes('immediate charging') ||
+                desc.includes('opportunity charging') || desc.includes('top-up charging') || desc.includes('range anxiety') ||
+                desc.includes('battery range') || desc.includes('epa range') || desc.includes('wltp range') ||
+                desc.includes('real-world range') || desc.includes('highway range') || desc.includes('city range') ||
+                desc.includes('combined range') || desc.includes('battery capacity') || desc.includes('kwh') ||
+                desc.includes('kilowatt-hour') || desc.includes('battery size') || desc.includes('battery pack') ||
+                desc.includes('battery module') || desc.includes('battery cell') || desc.includes('lithium-ion') ||
+                desc.includes('li-ion') || desc.includes('nickel-metal hydride') || desc.includes('nimh') ||
+                desc.includes('lead-acid') || desc.includes('lithium iron phosphate') || desc.includes('lfp') ||
+                desc.includes('lithium polymer') || desc.includes('lipo') || desc.includes('solid state') ||
+                desc.includes('solid-state') || desc.includes('battery degradation') || desc.includes('capacity fade') ||
+                desc.includes('cycle life') || desc.includes('calendar life') || desc.includes('thermal management') ||
+                desc.includes('battery cooling') || desc.includes('battery heating') || desc.includes('preconditioning') ||
+                desc.includes('battery preconditioning') || desc.includes('cabin preconditioning') || desc.includes('remote start') ||
+                desc.includes('climate control') || desc.includes('heating') || desc.includes('cooling') ||
+                desc.includes('air conditioning') || desc.includes('ac') || desc.includes('defrost') ||
+                desc.includes('defog') || desc.includes('heated seats') || desc.includes('ventilated seats') ||
+                desc.includes('cooled seats') || desc.includes('massage seats') || desc.includes('memory seats') ||
+                desc.includes('power seats') || desc.includes('manual seats') || desc.includes('bucket seats') ||
+                desc.includes('bench seats') || desc.includes('captain chairs') || desc.includes('jump seats') ||
+                desc.includes('third row') || desc.includes('second row') || desc.includes('first row') ||
+                desc.includes('driver seat') || desc.includes('passenger seat') || desc.includes('rear seat') ||
+                desc.includes('front seat') || desc.includes('back seat') || desc.includes('middle seat') ||
+                desc.includes('window seat') || desc.includes('aisle seat') || desc.includes('exit row') ||
+                desc.includes('bulkhead') || desc.includes('galley') || desc.includes('lavatory') ||
+                desc.includes('restroom') || desc.includes('bathroom') || desc.includes('toilet') ||
+                desc.includes('urinal') || desc.includes('sink') || desc.includes('mirror') ||
+                desc.includes('towel') || desc.includes('soap') || desc.includes('hand sanitizer') ||
+                desc.includes('tissue') || desc.includes('toilet paper') || desc.includes('paper towel') ||
+                desc.includes('air freshener') || desc.includes('deodorizer') || desc.includes('odor eliminator') ||
+                desc.includes('febreze') || desc.includes('lysol') || desc.includes('clorox') ||
+                desc.includes('disinfectant') || desc.includes('sanitizer') || desc.includes('cleaner') ||
+                desc.includes('detergent') || desc.includes('soap') || desc.includes('shampoo') ||
+                desc.includes('conditioner') || desc.includes('body wash') || desc.includes('lotion') ||
+                desc.includes('moisturizer') || desc.includes('sunscreen') || desc.includes('spf') ||
+                desc.includes('tanning') || desc.includes('self tanner') || desc.includes('bronzer') ||
+                desc.includes('foundation') || desc.includes('concealer') || desc.includes('powder') ||
+                desc.includes('blush') || desc.includes('eyeshadow') || desc.includes('eyeliner') ||
+                desc.includes('mascara') || desc.includes('eyebrow') || desc.includes('lipstick') ||
+                desc.includes('lip gloss') || desc.includes('lip balm') || desc.includes('nail polish') ||
+                desc.includes('nail art') || desc.includes('jewelry') || desc.includes('accessories') ||
+                desc.includes('handbag') || desc.includes('purse') || desc.includes('wallet') ||
+                desc.includes('belt') || desc.includes('scarf') || desc.includes('hat') ||
+                desc.includes('cap') || desc.includes('sunglasses') || desc.includes('glasses') ||
+                desc.includes('contact') || desc.includes('watch') || desc.includes('timepiece') ||
+                desc.includes('clock') || desc.includes('electronics') || desc.includes('computer') ||
+                desc.includes('laptop') || desc.includes('desktop') || desc.includes('tablet') ||
+                desc.includes('phone') || desc.includes('smartphone') || desc.includes('mobile') ||
+                desc.includes('cell') || desc.includes('headphones') || desc.includes('earbuds') ||
+                desc.includes('speaker') || desc.includes('camera') || desc.includes('video') ||
+                desc.includes('tv') || desc.includes('television') || desc.includes('monitor') ||
+                desc.includes('display') || desc.includes('keyboard') || desc.includes('mouse') ||
+                desc.includes('printer') || desc.includes('scanner') || desc.includes('router') ||
+                desc.includes('modem') || desc.includes('cable') || desc.includes('adapter') ||
+                desc.includes('charger') || desc.includes('battery') || desc.includes('power') ||
+                desc.includes('usb') || desc.includes('hdmi') || desc.includes('bluetooth') ||
+                desc.includes('wifi') || desc.includes('wireless') || desc.includes('gaming') ||
+                desc.includes('game') || desc.includes('console') || desc.includes('controller') ||
+                desc.includes('joystick') || desc.includes('board game') || desc.includes('card game') ||
+                desc.includes('puzzle') || desc.includes('toy') || desc.includes('doll') ||
+                desc.includes('action figure') || desc.includes('lego') || desc.includes('building') ||
+                desc.includes('construction') || desc.includes('art') || desc.includes('craft') ||
+                desc.includes('hobby') || desc.includes('collectible') || desc.includes('antique') ||
+                desc.includes('vintage') || desc.includes('furniture') || desc.includes('home') ||
+                desc.includes('decor') || desc.includes('decoration') || desc.includes('furnishing') ||
+                desc.includes('appliance') || desc.includes('kitchen') || desc.includes('bathroom') ||
+                desc.includes('bedroom') || desc.includes('living room') || desc.includes('dining room') ||
+                desc.includes('office') || desc.includes('study') || desc.includes('den') ||
+                desc.includes('basement') || desc.includes('attic') || desc.includes('garage') ||
+                desc.includes('shed') || desc.includes('garden') || desc.includes('yard') ||
+                desc.includes('patio') || desc.includes('deck') || desc.includes('porch') ||
+                desc.includes('balcony') || desc.includes('terrace') || desc.includes('roof') ||
+                desc.includes('floor') || desc.includes('wall') || desc.includes('ceiling') ||
+                desc.includes('door') || desc.includes('window') || desc.includes('curtain') ||
+                desc.includes('blind') || desc.includes('shade') || desc.includes('carpet') ||
+                desc.includes('rug') || desc.includes('mat') || desc.includes('pillow') ||
+                desc.includes('cushion') || desc.includes('throw') || desc.includes('blanket') ||
+                desc.includes('comforter') || desc.includes('duvet') || desc.includes('sheet') ||
+                desc.includes('bedding') || desc.includes('linen') || desc.includes('towel') ||
+                desc.includes('washcloth') || desc.includes('detergent') || desc.includes('cleaner') ||
+                desc.includes('disinfectant') || desc.includes('bleach') || desc.includes('fabric softener') ||
+                desc.includes('dryer sheet') || desc.includes('paper') || desc.includes('tissue') ||
+                desc.includes('napkin') || desc.includes('plate') || desc.includes('bowl') ||
+                desc.includes('cup') || desc.includes('glass') || desc.includes('mug') ||
+                desc.includes('utensil') || desc.includes('fork') || desc.includes('spoon') ||
+                desc.includes('knife') || desc.includes('pot') || desc.includes('pan') ||
+                desc.includes('baking') || desc.includes('cooking') || desc.includes('kitchenware') ||
+                desc.includes('refrigerator') || desc.includes('fridge') || desc.includes('freezer') ||
+                desc.includes('stove') || desc.includes('oven') || desc.includes('microwave') ||
+                desc.includes('dishwasher') || desc.includes('washer') || desc.includes('dryer') ||
+                desc.includes('vacuum') || desc.includes('sweeper') || desc.includes('mop') ||
+                desc.includes('broom') || desc.includes('dustpan') || desc.includes('trash') ||
+                desc.includes('garbage') || desc.includes('waste') || desc.includes('recycling') ||
+                desc.includes('compost') || desc.includes('bin') || desc.includes('container') ||
+                desc.includes('storage') || desc.includes('organizer') || desc.includes('shelf') ||
+                desc.includes('rack') || desc.includes('hook') || desc.includes('hanger') ||
+                desc.includes('closet') || desc.includes('wardrobe') || desc.includes('dresser') ||
+                desc.includes('chest') || desc.includes('cabinet') || desc.includes('drawer') ||
+                desc.includes('basket') || desc.includes('box') || desc.includes('bag') ||
+                desc.includes('backpack') || desc.includes('duffel') || desc.includes('suitcase') ||
+                desc.includes('luggage') || desc.includes('travel') || desc.includes('trip') ||
+                desc.includes('vacation') || desc.includes('holiday') || desc.includes('getaway') ||
+                desc.includes('retreat') || desc.includes('resort') || desc.includes('hotel') ||
+                desc.includes('motel') || desc.includes('inn') || desc.includes('lodge') ||
+                desc.includes('cabin') || desc.includes('cottage') || desc.includes('villa') ||
+                desc.includes('apartment') || desc.includes('condo') || desc.includes('house') ||
+                desc.includes('property') || desc.includes('real estate') || desc.includes('mortgage') ||
+                desc.includes('rent') || desc.includes('lease') || desc.includes('deposit') ||
+                desc.includes('security') || desc.includes('insurance') || desc.includes('policy') ||
+                desc.includes('coverage') || desc.includes('claim') || desc.includes('premium') ||
+                desc.includes('deductible') || desc.includes('copay') || desc.includes('coinsurance') ||
+                desc.includes('benefit') || desc.includes('medical') || desc.includes('health') ||
+                desc.includes('dental') || desc.includes('vision') || desc.includes('life') ||
+                desc.includes('auto') || desc.includes('car') || desc.includes('vehicle') ||
+                desc.includes('motorcycle') || desc.includes('bike') || desc.includes('bicycle') ||
+                desc.includes('scooter') || desc.includes('skateboard') || desc.includes('roller') ||
+                desc.includes('skate') || desc.includes('sport') || desc.includes('fitness') ||
+                desc.includes('exercise') || desc.includes('workout') || desc.includes('gym') ||
+                desc.includes('health club') || desc.includes('yoga') || desc.includes('pilates') ||
+                desc.includes('zumba') || desc.includes('spinning') || desc.includes('cycling') ||
+                desc.includes('running') || desc.includes('jogging') || desc.includes('walking') ||
+                desc.includes('hiking') || desc.includes('climbing') || desc.includes('swimming') ||
+                desc.includes('diving') || desc.includes('surfing') || desc.includes('skiing') ||
+                desc.includes('snowboarding') || desc.includes('skating') || desc.includes('hockey') ||
+                desc.includes('soccer') || desc.includes('football') || desc.includes('basketball') ||
+                desc.includes('baseball') || desc.includes('tennis') || desc.includes('golf') ||
+                desc.includes('volleyball') || desc.includes('badminton') || desc.includes('table tennis') ||
+                desc.includes('ping pong') || desc.includes('racquetball') || desc.includes('squash') ||
+                desc.includes('handball') || desc.includes('bowling') || desc.includes('pool') ||
+                desc.includes('billiards') || desc.includes('darts') || desc.includes('archery') ||
+                desc.includes('shooting') || desc.includes('fishing') || desc.includes('hunting') ||
+                desc.includes('camping') || desc.includes('backpacking') || desc.includes('mountaineering') ||
+                desc.includes('rock climbing') || desc.includes('bouldering') || desc.includes('rappelling') ||
+                desc.includes('zip lining') || desc.includes('paragliding') || desc.includes('skydiving') ||
+                desc.includes('bungee') || desc.includes('rafting') || desc.includes('kayaking') ||
+                desc.includes('canoeing') || desc.includes('rowing') || desc.includes('sailing') ||
+                desc.includes('boating') || desc.includes('helmet') || desc.includes('pad') ||
+                desc.includes('protective') || desc.includes('safety') || desc.includes('equipment') ||
+                desc.includes('gear') || desc.includes('tool') || desc.includes('hardware') ||
+                desc.includes('lumber') || desc.includes('wood') || desc.includes('metal') ||
+                desc.includes('plastic') || desc.includes('ceramic') || desc.includes('stone') ||
+                desc.includes('concrete') || desc.includes('cement') || desc.includes('brick') ||
+                desc.includes('tile') || desc.includes('marble') || desc.includes('granite') ||
+                desc.includes('quartz') || desc.includes('slate') || desc.includes('limestone') ||
+                desc.includes('sandstone') || desc.includes('travertine') || desc.includes('onyx') ||
+                desc.includes('jade') || desc.includes('jadeite') || desc.includes('nephrite') ||
+                desc.includes('agate') || desc.includes('chalcedony') || desc.includes('carnelian') ||
+                desc.includes('sardonyx') || desc.includes('jasper') || desc.includes('bloodstone') ||
+                desc.includes('heliotrope') || desc.includes('chrysoprase') || desc.includes('prase') ||
+                desc.includes('plasma') || desc.includes('sard') || desc.includes('sardius') ||
+                desc.includes('sardine') || desc.includes('sardonyx') || desc.includes('jasper') ||
+                desc.includes('bloodstone')) {
               return 'Transportation'
             }
             
@@ -206,7 +625,12 @@ export function CategoryBreakdown() {
             if (desc.includes('atm') || desc.includes('withdrawal') || desc.includes('deposit') ||
                 desc.includes('transfer') || desc.includes('bank') || desc.includes('credit union') ||
                 desc.includes('check') || desc.includes('ach') || desc.includes('wire')) {
-              return 'Uncategorized' // Keep banking as uncategorized for now
+              return 'Other' // Categorize banking as "Other" instead of "Uncategorized"
+            }
+            
+            // Catch-all for any remaining transactions - categorize as "Other" instead of "Uncategorized"
+            if (desc.length > 0) {
+              return 'Other'
             }
             
             return 'Uncategorized'
