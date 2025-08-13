@@ -49,14 +49,61 @@ function parseCSVSimple(csvContent: string): ParsedTransaction[] {
           const amountStr = record[headers[amountIndex]]
           const account = accountIndex >= 0 ? record[headers[accountIndex]] : 'Default Account'
           
-          // Simple amount parsing
+          // Enhanced amount parsing for bank statements
           let amount = parseFloat(amountStr.replace(/[$,]/g, ''))
           if (isNaN(amount)) continue
           
-          // Handle negative amounts
+          console.log('Amount processing for:', description, {
+            originalAmount: amountStr,
+            parsedAmount: amount,
+            description: description
+          })
+          
+          // Handle parentheses notation for negative amounts
           if (amountStr.includes('(') && amountStr.includes(')')) {
             amount = -Math.abs(amount)
           }
+          
+          // For bank statements: typically debits (expenses) are positive, credits (income) are negative
+          // We need to invert this so that expenses are negative and income is positive
+          // Check if this looks like a bank statement format
+          const isBankStatement = headers.some(h => 
+            h.toLowerCase().includes('debit') || 
+            h.toLowerCase().includes('credit') || 
+            h.toLowerCase().includes('withdrawal') || 
+            h.toLowerCase().includes('deposit')
+          )
+          
+          if (isBankStatement) {
+            // Invert the amounts: positive becomes negative (expense), negative becomes positive (income)
+            amount = -amount
+          }
+          
+          // Additional logic: if description suggests income, make sure it's positive
+          const incomeKeywords = ['deposit', 'salary', 'income', 'payment', 'refund', 'credit', 'transfer in', 'ach credit']
+          const isIncome = incomeKeywords.some(keyword => 
+            description.toLowerCase().includes(keyword)
+          )
+          
+          if (isIncome && amount < 0) {
+            amount = Math.abs(amount) // Make income positive
+          }
+          
+          // Additional logic: if description suggests expense, make sure it's negative
+          const expenseKeywords = ['purchase', 'payment', 'withdrawal', 'debit', 'charge', 'fee', 'atm']
+          const isExpense = expenseKeywords.some(keyword => 
+            description.toLowerCase().includes(keyword)
+          )
+          
+          if (isExpense && amount > 0) {
+            amount = -Math.abs(amount) // Make expense negative
+          }
+          
+          console.log('Final amount for:', description, {
+            finalAmount: amount,
+            isIncome: amount > 0,
+            isExpense: amount < 0
+          })
           
           results.push({
             date,
