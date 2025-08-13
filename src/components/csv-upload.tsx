@@ -480,6 +480,30 @@ export function CSVUpload() {
 
       console.log('Accounts available for import:', accounts)
 
+      // If force import is enabled, delete existing transactions first
+      if (updateExisting) {
+        console.log('Force import enabled - deleting existing transactions...')
+        try {
+          const existingTransactions = await transactionService.getTransactions(user.uid, 1000)
+          console.log(`Found ${existingTransactions.length} existing transactions to delete`)
+          
+          for (const existingTransaction of existingTransactions) {
+            if (existingTransaction.id) {
+              try {
+                await transactionService.deleteTransaction(existingTransaction.id)
+                console.log(`Deleted existing transaction: ${existingTransaction.description}`)
+              } catch (error) {
+                console.warn(`Failed to delete transaction ${existingTransaction.id}:`, error)
+              }
+            }
+          }
+          console.log('Finished deleting existing transactions')
+        } catch (error) {
+          console.error('Error deleting existing transactions:', error)
+          // Continue with import anyway
+        }
+      }
+      
       console.log('Starting to import', parsedTransactions.length, 'transactions...')
       
       for (let i = 0; i < parsedTransactions.length; i++) {
@@ -499,6 +523,10 @@ export function CSVUpload() {
           console.log(`Force importing duplicate transaction ${i + 1}:`, transaction.description)
           // Clear the duplicate flag to allow import
           transaction.isDuplicate = false
+          
+          // If we have an existing ID, we could update instead of create new
+          // For now, we'll create new transactions but with better amount parsing
+          console.log(`Creating new transaction to replace existing:`, transaction.description)
         }
 
         console.log(`Processing transaction ${i + 1}/${parsedTransactions.length}:`, transaction.description)
