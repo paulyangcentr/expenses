@@ -149,6 +149,7 @@ export function CSVUpload() {
   const [parsedTransactions, setParsedTransactions] = useState<ParsedTransaction[]>([])
   const [isUploading, setIsUploading] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
+  const [updateExisting, setUpdateExisting] = useState(false)
   const { user } = useAuth()
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
@@ -489,9 +490,15 @@ export function CSVUpload() {
           continue
         }
         
-        if (transaction.isDuplicate) {
+        if (transaction.isDuplicate && !updateExisting) {
           console.log(`Skipping duplicate transaction ${i + 1}:`, transaction.description)
           continue
+        }
+
+        if (transaction.isDuplicate && updateExisting) {
+          console.log(`Force importing duplicate transaction ${i + 1}:`, transaction.description)
+          // Clear the duplicate flag to allow import
+          transaction.isDuplicate = false
         }
 
         console.log(`Processing transaction ${i + 1}/${parsedTransactions.length}:`, transaction.description)
@@ -595,9 +602,23 @@ export function CSVUpload() {
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span>Preview ({parsedTransactions.length} transactions)</span>
-              <Button onClick={handleImport} disabled={isUploading}>
-                {isUploading ? 'Importing...' : 'Import All'}
-              </Button>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="updateExisting"
+                    checked={updateExisting}
+                    onChange={(e) => setUpdateExisting(e.target.checked)}
+                    className="rounded border-gray-300"
+                  />
+                  <label htmlFor="updateExisting" className="text-sm text-gray-600">
+                    Force import duplicates (update existing)
+                  </label>
+                </div>
+                <Button onClick={handleImport} disabled={isUploading}>
+                  {isUploading ? 'Importing...' : 'Import All'}
+                </Button>
+              </div>
             </CardTitle>
             <CardDescription>
               Review the parsed transactions before importing
