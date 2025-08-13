@@ -47,23 +47,111 @@ export function TransactionList({ limit }: TransactionListProps) {
       const categoryMap = new Map(categories.map(c => [c.id, c]))
       const accountMap = new Map(accounts.map(a => [a.id, a]))
       
-      // Transform Firebase transactions to display format
-      const displayTransactions: DisplayTransaction[] = firebaseTransactions.map(t => ({
-        id: t.id || '',
-        date: t.date,
-        description: t.description,
-        merchant: t.merchant,
-        amount: t.amount,
-        category: t.categoryId ? {
-          name: categoryMap.get(t.categoryId)?.name || 'Unknown',
-          type: categoryMap.get(t.categoryId)?.type || 'SPEND'
-        } : undefined,
-        account: {
-          name: accountMap.get(t.accountId)?.name || 'Unknown Account'
-        },
-        isTransfer: t.isTransfer,
-        tags: t.tags ? t.tags.split(',').map(tag => tag.trim()) : []
-      }))
+      // Intelligent category detection function
+      const detectCategoryFromDescription = (description: string): string => {
+        const desc = description.toLowerCase()
+        
+        // Food & Dining patterns
+        if (desc.includes('restaurant') || desc.includes('cafe') || desc.includes('coffee') || 
+            desc.includes('starbucks') || desc.includes('mcdonalds') || desc.includes('burger') ||
+            desc.includes('pizza') || desc.includes('subway') || desc.includes('chipotle') ||
+            desc.includes('doordash') || desc.includes('uber eats') || desc.includes('grubhub') ||
+            desc.includes('food') || desc.includes('dining') || desc.includes('meal') ||
+            desc.includes('dunkin') || desc.includes('taco') || desc.includes('kfc') ||
+            desc.includes('wendy') || desc.includes('domino') || desc.includes('papa john') ||
+            desc.includes('sandwich') || desc.includes('kitchen') || desc.includes('doughnut') ||
+            desc.includes('kabob') || desc.includes('kabab') || desc.includes('krispy') ||
+            desc.includes('prince') || desc.includes('orange ca') || desc.includes('santa ana') ||
+            desc.includes('austin tx') || desc.includes('leee') || desc.includes('lee') ||
+            desc.includes('sushi') || desc.includes('ramen') || desc.includes('garden') ||
+            desc.includes('staterbros') || desc.includes('marukai') || desc.includes('market') ||
+            desc.includes('grocery') || desc.includes('supermarket') || desc.includes('food store') ||
+            desc.includes('cafe') || desc.includes('beverage') || desc.includes('drink') ||
+            desc.includes('lost in dreams') || desc.includes('bev') || desc.includes('7 leaves')) {
+          return 'Food & Dining'
+        }
+        
+        // Shopping patterns
+        if (desc.includes('amazon') || desc.includes('target') || desc.includes('walmart') ||
+            desc.includes('costco') || desc.includes('best buy') || desc.includes('apple') ||
+            desc.includes('nike') || desc.includes('adidas') || desc.includes('macy') ||
+            desc.includes('nordstrom') || desc.includes('h&m') || desc.includes('zara') ||
+            desc.includes('shopping') || desc.includes('store') || desc.includes('retail') ||
+            desc.includes('mkptl') || desc.includes('marketplace') || desc.includes('ebay') ||
+            desc.includes('etsy') || desc.includes('shop') || desc.includes('mall') ||
+            desc.includes('amzn.com') || desc.includes('amazon.com')) {
+          return 'Shopping'
+        }
+        
+        // Transportation patterns
+        if (desc.includes('uber') || desc.includes('lyft') || desc.includes('taxi') ||
+            desc.includes('gas') || desc.includes('shell') || desc.includes('chevron') ||
+            desc.includes('exxon') || desc.includes('bp') || desc.includes('mobil') ||
+            desc.includes('parking') || desc.includes('toll') || desc.includes('transit') ||
+            desc.includes('metro') || desc.includes('bus') || desc.includes('train') ||
+            desc.includes('airline') || desc.includes('delta') || desc.includes('united') ||
+            desc.includes('southwest') || desc.includes('car rental') || desc.includes('hertz') ||
+            desc.includes('arco') || desc.includes('ampm') || desc.includes('classpass')) {
+          return 'Transportation'
+        }
+        
+        // Income patterns
+        if (desc.includes('deposit') || desc.includes('salary') || desc.includes('payroll') ||
+            desc.includes('income') || desc.includes('payment') || desc.includes('refund') ||
+            desc.includes('credit') || desc.includes('transfer in') || desc.includes('ach credit')) {
+          return 'Income'
+        }
+        
+        return 'Other'
+      }
+      
+      // Transform Firebase transactions to display format with intelligent categorization
+      const displayTransactions: DisplayTransaction[] = firebaseTransactions.map(t => {
+        let categoryName = 'Unknown'
+        let categoryType: 'SPEND' | 'SAVE' = 'SPEND'
+        
+        // First try to use the assigned category
+        if (t.categoryId && categoryMap.has(t.categoryId)) {
+          const assignedCategory = categoryMap.get(t.categoryId)!
+          
+          // If the assigned category is "Uncategorized", try intelligent detection
+          if (assignedCategory.name === 'Uncategorized') {
+            const detectedCategory = detectCategoryFromDescription(t.description)
+            if (detectedCategory !== 'Other') {
+              categoryName = detectedCategory
+              categoryType = detectedCategory === 'Income' ? 'SAVE' : 'SPEND'
+            } else {
+              categoryName = assignedCategory.name
+              categoryType = assignedCategory.type
+            }
+          } else {
+            categoryName = assignedCategory.name
+            categoryType = assignedCategory.type
+          }
+        } else {
+          // Fall back to intelligent detection
+          const detectedCategory = detectCategoryFromDescription(t.description)
+          categoryName = detectedCategory
+          categoryType = detectedCategory === 'Income' ? 'SAVE' : 'SPEND'
+        }
+        
+        return {
+          id: t.id || '',
+          date: t.date,
+          description: t.description,
+          merchant: t.merchant,
+          amount: t.amount,
+          category: {
+            name: categoryName,
+            type: categoryType
+          },
+          account: {
+            name: accountMap.get(t.accountId)?.name || 'Unknown Account'
+          },
+          isTransfer: t.isTransfer,
+          tags: t.tags ? t.tags.split(',').map(tag => tag.trim()) : []
+        }
+      })
       
       setTransactions(displayTransactions)
     } catch (error) {
