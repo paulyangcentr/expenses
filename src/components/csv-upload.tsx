@@ -29,7 +29,7 @@ function parseCSVSimple(csvContent: string): ParsedTransaction[] {
       const values = lines[i].split(',').map(v => v.trim())
       if (values.length !== headers.length) continue
       
-      const record: any = {}
+      const record: Record<string, string> = {}
       headers.forEach((header, index) => {
         record[header] = values[index]
       })
@@ -69,16 +69,16 @@ function parseCSVSimple(csvContent: string): ParsedTransaction[] {
             tags: [],
             externalId: undefined
           })
-        } catch (error) {
+        } catch (error: unknown) {
           console.warn('Simple parser failed to parse line:', lines[i], error)
         }
       }
     }
     
     return results
-  } catch (error) {
-    console.error('Simple parser error:', error)
-    return []
+      } catch (error: unknown) {
+      console.error('Simple parser error:', error)
+      return []
   }
 }
 
@@ -232,8 +232,8 @@ export function CSVUpload() {
 
       // Get categories and accounts for suggestions
       console.log('Fetching categories and accounts for suggestions...')
-      let categories: any[] = []
-      let accounts: any[] = []
+      let categories: unknown[] = []
+      let accounts: unknown[] = []
       
       try {
         categories = await categoryService.getCategories(user.uid)
@@ -327,8 +327,8 @@ export function CSVUpload() {
       }
 
       // Get or create default categories and accounts
-      let categories: any[] = []
-      let accounts: any[] = []
+      let categories: unknown[] = []
+      let accounts: unknown[] = []
       
       try {
         console.log('Fetching existing categories...')
@@ -450,8 +450,8 @@ export function CSVUpload() {
         console.log(`Processing transaction ${i + 1}/${parsedTransactions.length}:`, transaction.description)
 
         // Find account ID
-        const account = accounts.find(a => a.name === transaction.account)
-        const accountId = account?.id || accounts[0]?.id
+        const account = accounts.find((a: any) => a.name === transaction.account)
+        const accountId = account?.id || (accounts[0] as any)?.id
         console.log('Using account ID:', accountId, 'for account:', transaction.account)
 
         if (!accountId) {
@@ -462,7 +462,7 @@ export function CSVUpload() {
         // Find category ID
         let categoryId: string | undefined
         if (transaction.suggestedCategory) {
-          const category = categories.find(c => c.name === transaction.suggestedCategory)
+          const category = categories.find((c: any) => c.name === transaction.suggestedCategory)
           categoryId = category?.id
           console.log('Using category ID:', categoryId, 'for category:', transaction.suggestedCategory)
         }

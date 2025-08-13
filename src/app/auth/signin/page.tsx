@@ -17,7 +17,7 @@ export default function SignInPage() {
   const { signIn, signUp } = useAuth()
   const router = useRouter()
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsLoading(true)
 
@@ -30,9 +30,9 @@ export default function SignInPage() {
         toast.success('Signed in successfully!')
       }
       router.push('/')
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Authentication error:', error)
-      toast.error(error.message || 'Authentication failed')
+      toast.error(error instanceof Error ? error.message : 'Authentication failed')
     } finally {
       setIsLoading(false)
     }
