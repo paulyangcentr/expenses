@@ -68,7 +68,7 @@ function detectFieldMapping(headers: string[]): Record<string, string> {
   return mapping
 }
 
-function normalizeAmount(amountStr: string, description?: string, headers?: string[]): number {
+function normalizeAmount(amountStr: string, description?: string): number {
   // Remove currency symbols and thousand separators
   let cleaned = amountStr.replace(/[$,€£¥]/g, '')
   
@@ -97,57 +97,48 @@ function normalizeAmount(amountStr: string, description?: string, headers?: stri
     amount = -Math.abs(amount)
   }
   
-  // Enhanced logic for bank statements and income/expense detection
-  if (description && headers) {
-    console.log('Enhanced amount processing for:', description, {
-      originalAmount: amountStr,
-      parsedAmount: amount,
-      description: description
-    })
-    
-    // For bank statements: typically debits (expenses) are positive, credits (income) are negative
-    // We need to invert this so that expenses are negative and income is positive
-    const isBankStatement = headers.some(h => 
-      h.toLowerCase().includes('debit') || 
-      h.toLowerCase().includes('credit') || 
-      h.toLowerCase().includes('withdrawal') || 
-      h.toLowerCase().includes('deposit')
-    )
-    
-    if (isBankStatement) {
-      // Invert the amounts: positive becomes negative (expense), negative becomes positive (income)
-      amount = -amount
-      console.log('Bank statement detected, inverting amount to:', amount)
+      // Enhanced logic for income/expense detection based on description
+    if (description) {
+      console.log('Enhanced amount processing for:', description, {
+        originalAmount: amountStr,
+        parsedAmount: amount,
+        description: description
+      })
+      
+      // Check if description suggests income (should be positive)
+      const incomeKeywords = [
+        'deposit', 'salary', 'income', 'refund', 'credit', 'transfer in', 'ach credit', 
+        'merchant offers credit', 'cashback', 'reward', 'bonus', 'interest earned'
+      ]
+      const isIncome = incomeKeywords.some(keyword => 
+        description.toLowerCase().includes(keyword)
+      )
+      
+      if (isIncome && amount < 0) {
+        amount = Math.abs(amount) // Make income positive
+        console.log('Income detected, making amount positive:', amount)
+      }
+      
+      // Check if description suggests expense (should be negative)
+      const expenseKeywords = [
+        'purchase', 'withdrawal', 'debit', 'charge', 'fee', 'atm', 'amazon', 'chipotle', 
+        'staterbros', 'gas', 'fuel', 'restaurant', 'grocery', 'shopping', 'payment'
+      ]
+      const isExpense = expenseKeywords.some(keyword => 
+        description.toLowerCase().includes(keyword)
+      )
+      
+      if (isExpense && amount > 0) {
+        amount = -Math.abs(amount) // Make expense negative
+        console.log('Expense detected, making amount negative:', amount)
+      }
+      
+      console.log('Final amount for:', description, {
+        finalAmount: amount,
+        isIncome: amount > 0,
+        isExpense: amount < 0
+      })
     }
-    
-    // Additional logic: if description suggests income, make sure it's positive
-    const incomeKeywords = ['deposit', 'salary', 'income', 'payment', 'refund', 'credit', 'transfer in', 'ach credit', 'merchant offers credit']
-    const isIncome = incomeKeywords.some(keyword => 
-      description.toLowerCase().includes(keyword)
-    )
-    
-    if (isIncome && amount < 0) {
-      amount = Math.abs(amount) // Make income positive
-      console.log('Income detected, making amount positive:', amount)
-    }
-    
-    // Additional logic: if description suggests expense, make sure it's negative
-    const expenseKeywords = ['purchase', 'payment', 'withdrawal', 'debit', 'charge', 'fee', 'atm', 'amazon', 'chipotle', 'staterbros']
-    const isExpense = expenseKeywords.some(keyword => 
-      description.toLowerCase().includes(keyword)
-    )
-    
-    if (isExpense && amount > 0) {
-      amount = -Math.abs(amount) // Make expense negative
-      console.log('Expense detected, making amount negative:', amount)
-    }
-    
-    console.log('Final amount for:', description, {
-      finalAmount: amount,
-      isIncome: amount > 0,
-      isExpense: amount < 0
-    })
-  }
   
   return amount
 }
@@ -292,8 +283,7 @@ function transformRecord(record: Record<string, string>, mapping: Record<string,
     let amount: number
     try {
       const description = transformed.description || transformed.merchant || 'Unknown transaction'
-      const headers = Object.keys(record)
-      amount = normalizeAmount(amountValue, description, headers)
+      amount = normalizeAmount(amountValue, description)
       console.log('transformRecord: Parsed amount:', amount)
     } catch (error) {
       console.error('transformRecord: Failed to parse amount:', amountValue, error)
