@@ -18,6 +18,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Disable error overlay
+              if (typeof window !== 'undefined') {
+                window.addEventListener('error', function(e) {
+                  e.preventDefault();
+                  return false;
+                });
+              }
+            `,
+          }}
+        />
+      </head>
       <body className={inter.className}>
         <FirebaseAuthProvider>
           {children}

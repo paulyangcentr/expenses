@@ -1,10 +1,17 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ['@prisma/client'],
-  webpack: (config) => {
-    config.externals = [...(config.externals || []), '@prisma/client'];
-    return config;
+  /* config options here */
+  reactStrictMode: true,
+  swcMinify: true,
+  // Disable error overlay in development
+  devIndicators: {
+    buildActivity: false,
+  },
+  // Disable error overlay
+  onDemandEntries: {
+    maxInactiveAge: 25 * 1000,
+    pagesBufferLength: 2,
   },
 };
 

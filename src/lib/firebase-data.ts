@@ -52,6 +52,7 @@ export interface Account {
 export const transactionService = {
   async getTransactions(userId: string, limitCount?: number): Promise<Transaction[]> {
     try {
+      console.log('Fetching transactions for user:', userId)
       let q = query(
         collection(db, 'transactions'),
         where('userId', '==', userId),
@@ -63,6 +64,7 @@ export const transactionService = {
       }
       
       const querySnapshot = await getDocs(q)
+      console.log('Found transactions:', querySnapshot.docs.length)
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
@@ -72,17 +74,19 @@ export const transactionService = {
       })) as Transaction[]
     } catch (error) {
       console.error('Error fetching transactions:', error)
-      return []
+      throw error
     }
   },
 
   async addTransaction(transaction: Omit<Transaction, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
     try {
+      console.log('Adding transaction to Firestore:', transaction)
       const docRef = await addDoc(collection(db, 'transactions'), {
         ...transaction,
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now(),
       })
+      console.log('Transaction added successfully with ID:', docRef.id)
       return docRef.id
     } catch (error) {
       console.error('Error adding transaction:', error)
@@ -118,6 +122,7 @@ export const transactionService = {
 export const categoryService = {
   async getCategories(userId: string): Promise<Category[]> {
     try {
+      console.log('Fetching categories for user:', userId)
       const q = query(
         collection(db, 'categories'),
         where('userId', '==', userId),
@@ -126,19 +131,22 @@ export const categoryService = {
       )
       
       const querySnapshot = await getDocs(q)
+      console.log('Found categories:', querySnapshot.docs.length)
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
       })) as Category[]
     } catch (error) {
       console.error('Error fetching categories:', error)
-      return []
+      throw error
     }
   },
 
   async addCategory(category: Omit<Category, 'id'>): Promise<string> {
     try {
+      console.log('Adding category to Firestore:', category)
       const docRef = await addDoc(collection(db, 'categories'), category)
+      console.log('Category added successfully with ID:', docRef.id)
       return docRef.id
     } catch (error) {
       console.error('Error adding category:', error)
@@ -151,27 +159,30 @@ export const categoryService = {
 export const accountService = {
   async getAccounts(userId: string): Promise<Account[]> {
     try {
+      console.log('Fetching accounts for user:', userId)
       const q = query(
         collection(db, 'accounts'),
         where('userId', '==', userId),
-        where('isActive', '==', true),
         orderBy('name', 'asc')
       )
       
       const querySnapshot = await getDocs(q)
+      console.log('Found accounts:', querySnapshot.docs.length)
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
       })) as Account[]
     } catch (error) {
       console.error('Error fetching accounts:', error)
-      return []
+      throw error
     }
   },
 
   async addAccount(account: Omit<Account, 'id'>): Promise<string> {
     try {
+      console.log('Adding account to Firestore:', account)
       const docRef = await addDoc(collection(db, 'accounts'), account)
+      console.log('Account added successfully with ID:', docRef.id)
       return docRef.id
     } catch (error) {
       console.error('Error adding account:', error)

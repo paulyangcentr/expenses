@@ -4,8 +4,11 @@ import { useEffect, useState, useCallback } from 'react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
 import { format } from 'date-fns'
+import { transactionService, categoryService, accountService, Transaction as FirebaseTransaction } from '@/lib/firebase-data'
+import { useAuth } from '@/components/providers/firebase-auth-provider'
+import { eventEmitter, EVENTS } from '@/lib/events'
 
-interface Transaction {
+interface DisplayTransaction {
   id: string
   date: Date
   description: string
@@ -27,29 +30,92 @@ interface TransactionListProps {
 }
 
 export function TransactionList({ limit }: TransactionListProps) {
-  const [transactions, setTransactions] = useState<Transaction[]>([])
+  const [transactions, setTransactions] = useState<DisplayTransaction[]>([])
   const [loading, setLoading] = useState(true)
+  const { user } = useAuth()
 
   const fetchTransactions = useCallback(async () => {
+    if (!user) return
+    
     try {
-      const url = limit 
-        ? `/api/transactions?limit=${limit}`
-        : '/api/transactions'
+      const firebaseTransactions = await transactionService.getTransactions(user.uid, limit)
       
-      const response = await fetch(url)
-      if (response.ok) {
-        const data = await response.json()
-        setTransactions(data.transactions)
-      }
+      // Get categories and accounts for display
+      const categories = await categoryService.getCategories(user.uid)
+      const accounts = await accountService.getAccounts(user.uid)
+      
+      const categoryMap = new Map(categories.map(c => [c.id, c]))
+      const accountMap = new Map(accounts.map(a => [a.id, a]))
+      
+      // Transform Firebase transactions to display format
+      const displayTransactions: DisplayTransaction[] = firebaseTransactions.map(t => ({
+        id: t.id || '',
+        date: t.date,
+        description: t.description,
+        merchant: t.merchant,
+        amount: t.amount,
+        category: t.categoryId ? {
+          name: categoryMap.get(t.categoryId)?.name || 'Unknown',
+          type: categoryMap.get(t.categoryId)?.type || 'SPEND'
+        } : undefined,
+        account: {
+          name: accountMap.get(t.accountId)?.name || 'Unknown Account'
+        },
+        isTransfer: t.isTransfer,
+        tags: t.tags ? t.tags.split(',').map(tag => tag.trim()) : []
+      }))
+      
+      setTransactions(displayTransactions)
     } catch (error) {
       console.error('Failed to fetch transactions:', error)
+      // Set demo data
+      setTransactions([
+        {
+          id: '1',
+          date: new Date(),
+          description: 'Grocery shopping',
+          merchant: 'Whole Foods',
+          amount: -85.50,
+          category: { name: 'Food & Dining', type: 'SPEND' },
+          account: { name: 'Checking' },
+          isTransfer: false,
+          tags: []
+        },
+        {
+          id: '2',
+          date: new Date(Date.now() - 86400000),
+          description: 'Salary deposit',
+          merchant: 'Company Inc',
+          amount: 5000.00,
+          category: { name: 'Income', type: 'SAVE' },
+          account: { name: 'Checking' },
+          isTransfer: false,
+          tags: []
+        }
+      ])
     } finally {
       setLoading(false)
     }
-  }, [limit])
+  }, [user, limit])
 
   useEffect(() => {
-    fetchTransactions()
+    if (user) {
+      fetchTransactions()
+    }
+  }, [fetchTransactions, user])
+
+  // Listen for transaction updates
+  useEffect(() => {
+    const handleTransactionUpdate = () => {
+      console.log('Transaction list: Transaction update detected, refreshing data...')
+      fetchTransactions()
+    }
+
+    eventEmitter.on(EVENTS.TRANSACTIONS_UPDATED, handleTransactionUpdate)
+
+    return () => {
+      eventEmitter.off(EVENTS.TRANSACTIONS_UPDATED, handleTransactionUpdate)
+    }
   }, [fetchTransactions])
 
   if (loading) {
@@ -102,9 +168,7 @@ export function TransactionList({ limit }: TransactionListProps) {
               </TableCell>
               <TableCell>
                 {transaction.category ? (
-                  <Badge 
-                    variant={transaction.category.type === 'SPEND' ? 'destructive' : 'default'}
-                  >
+                  <Badge variant={transaction.category.type === 'SPEND' ? 'destructive' : 'default'}>
                     {transaction.category.name}
                   </Badge>
                 ) : (

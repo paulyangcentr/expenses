@@ -11,6 +11,18 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 }
 
+// Debug: Log configuration (remove in production)
+if (typeof window !== 'undefined') {
+  console.log('Firebase Config:', {
+    apiKey: firebaseConfig.apiKey ? 'SET' : 'MISSING',
+    authDomain: firebaseConfig.authDomain,
+    projectId: firebaseConfig.projectId,
+    storageBucket: firebaseConfig.storageBucket,
+    messagingSenderId: firebaseConfig.messagingSenderId,
+    appId: firebaseConfig.appId ? 'SET' : 'MISSING'
+  })
+}
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
 

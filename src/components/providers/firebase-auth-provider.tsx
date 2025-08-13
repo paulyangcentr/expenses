@@ -46,10 +46,29 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
 
   const signUp = async (email: string, password: string) => {
     try {
-      await createUserWithEmailAndPassword(auth, email, password)
-    } catch (error) {
+      console.log('Attempting to sign up with email:', email)
+      const result = await createUserWithEmailAndPassword(auth, email, password)
+      console.log('Sign up successful:', result.user.email)
+    } catch (error: any) {
       console.error('Error signing up:', error)
-      throw error
+      console.error('Error code:', error.code)
+      console.error('Error message:', error.message)
+      
+      // Provide more helpful error messages
+      let userMessage = 'Sign up failed'
+      if (error.code === 'auth/configuration-not-found') {
+        userMessage = 'Firebase Authentication is not enabled. Please enable it in the Firebase console.'
+      } else if (error.code === 'auth/email-already-in-use') {
+        userMessage = 'An account with this email already exists.'
+      } else if (error.code === 'auth/weak-password') {
+        userMessage = 'Password should be at least 6 characters long.'
+      } else if (error.code === 'auth/invalid-email') {
+        userMessage = 'Please enter a valid email address.'
+      }
+      
+      const enhancedError = new Error(userMessage) as any
+      enhancedError.code = error.code
+      throw enhancedError
     }
   }
 
