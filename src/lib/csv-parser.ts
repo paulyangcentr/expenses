@@ -345,21 +345,25 @@ function transformRecord(record: Record<string, string>, mapping: Record<string,
     
     // If we have separate debit/credit columns, use the appropriate one
     if (debitValue && debitValue.trim() !== '') {
-      amountValue = `-${debitValue}` // Debit is negative (expense)
-      console.log('transformRecord: Using debit value:', amountValue)
+      // Debit is positive in CSV = money going out = expense = should be negative in our system
+      amountValue = `-${debitValue}`
+      console.log('transformRecord: Using debit value (positive in CSV) as negative expense:', amountValue)
     } else if (creditValue && creditValue.trim() !== '') {
-      // For credits, we need to determine if it's income or expense based on description
+      // Credit is negative in CSV = money coming in = income = should be positive in our system
+      // But we need to check if it's actually income or just a negative expense
       const description = transformed.description || transformed.merchant || 'Unknown transaction'
       const isIncome = ['deposit', 'salary', 'income', 'refund', 'transfer in', 'ach credit', 'merchant offers credit', 'cashback', 'reward', 'bonus'].some(keyword => 
         description.toLowerCase().includes(keyword)
       )
       
       if (isIncome) {
-        amountValue = creditValue // Credit income is positive
-        console.log('transformRecord: Using credit value as positive income:', amountValue)
+        // Credit income (negative in CSV) should be positive in our system
+        amountValue = `-${creditValue}` // Remove the negative sign from CSV
+        console.log('transformRecord: Using credit value (negative in CSV) as positive income:', amountValue)
       } else {
-        amountValue = `-${creditValue}` // Credit expense is negative
-        console.log('transformRecord: Using credit value as negative expense:', amountValue)
+        // Credit expense (negative in CSV) should remain negative in our system
+        amountValue = creditValue
+        console.log('transformRecord: Using credit value (negative in CSV) as negative expense:', amountValue)
       }
     }
     
