@@ -68,7 +68,80 @@ function detectFieldMapping(headers: string[]): Record<string, string> {
   return mapping
 }
 
-function normalizeAmount(amountStr: string, description?: string): number {
+// Global state to track CSV format analysis
+let csvFormatAnalysis: {
+  hasSeparateDebitCredit: boolean
+  debitColumnName?: string
+  creditColumnName?: string
+  amountColumnName?: string
+  isBankStatement: boolean
+  expensePatterns: string[]
+  incomePatterns: string[]
+} | null = null
+
+function analyzeCSVFormat(records: Record<string, string>[], headers: string[]): void {
+  if (csvFormatAnalysis) return // Already analyzed
+  
+  console.log('Analyzing CSV format...')
+  console.log('Headers:', headers)
+  console.log('Sample records:', records.slice(0, 3))
+  
+  // Check for separate debit/credit columns
+  const debitColumns = headers.filter(h => h.toLowerCase().includes('debit'))
+  const creditColumns = headers.filter(h => h.toLowerCase().includes('credit'))
+  const amountColumns = headers.filter(h => 
+    h.toLowerCase().includes('amount') && 
+    !h.toLowerCase().includes('debit') && 
+    !h.toLowerCase().includes('credit')
+  )
+  
+  const hasSeparateDebitCredit = debitColumns.length > 0 && creditColumns.length > 0
+  
+  // Analyze transaction patterns to determine what should be positive/negative
+  const expenseKeywords = ['amazon', 'chipotle', 'staterbros', 'purchase', 'payment', 'withdrawal', 'atm', 'gas', 'fuel', 'restaurant', 'grocery', 'shopping']
+  const incomeKeywords = ['deposit', 'salary', 'income', 'refund', 'credit', 'transfer in', 'ach credit', 'merchant offers credit', 'cashback', 'reward', 'bonus']
+  
+  // Count how many transactions match expense vs income patterns
+  let expenseMatches = 0
+  let incomeMatches = 0
+  
+  records.forEach(record => {
+    const description = record[headers.find(h => h.toLowerCase().includes('description')) || ''] || 
+                       record[headers.find(h => h.toLowerCase().includes('merchant')) || ''] || ''
+    
+    const hasExpenseKeyword = expenseKeywords.some(keyword => 
+      description.toLowerCase().includes(keyword)
+    )
+    const hasIncomeKeyword = incomeKeywords.some(keyword => 
+      description.toLowerCase().includes(keyword)
+    )
+    
+    if (hasExpenseKeyword) expenseMatches++
+    if (hasIncomeKeyword) incomeMatches++
+  })
+  
+  console.log('CSV Analysis Results:', {
+    hasSeparateDebitCredit,
+    debitColumns,
+    creditColumns,
+    amountColumns,
+    expenseMatches,
+    incomeMatches,
+    totalRecords: records.length
+  })
+  
+  csvFormatAnalysis = {
+    hasSeparateDebitCredit,
+    debitColumnName: debitColumns[0],
+    creditColumnName: creditColumns[0],
+    amountColumnName: amountColumns[0],
+    isBankStatement: hasSeparateDebitCredit || headers.some(h => h.toLowerCase().includes('bank')),
+    expensePatterns: expenseKeywords,
+    incomePatterns: incomeKeywords
+  }
+}
+
+function normalizeAmount(amountStr: string, description?: string, record?: Record<string, string>, headers?: string[]): number {
   console.log('normalizeAmount: Starting with amountStr:', amountStr, 'description:', description)
   
   // Remove currency symbols and thousand separators
@@ -104,48 +177,39 @@ function normalizeAmount(amountStr: string, description?: string): number {
     console.log('normalizeAmount: Applied negative sign:', amount)
   }
   
-      // Enhanced logic for income/expense detection based on description
-    if (description) {
-      console.log('Enhanced amount processing for:', description, {
-        originalAmount: amountStr,
-        parsedAmount: amount,
-        description: description
-      })
-      
-      // Check if description suggests income (should be positive)
-      const incomeKeywords = [
-        'deposit', 'salary', 'income', 'refund', 'credit', 'transfer in', 'ach credit', 
-        'merchant offers credit', 'cashback', 'reward', 'bonus', 'interest earned'
-      ]
-      const isIncome = incomeKeywords.some(keyword => 
-        description.toLowerCase().includes(keyword)
-      )
-      
-      if (isIncome && amount < 0) {
-        amount = Math.abs(amount) // Make income positive
-        console.log('Income detected, making amount positive:', amount)
-      }
-      
-      // Check if description suggests expense (should be negative)
-      const expenseKeywords = [
-        'purchase', 'withdrawal', 'debit', 'charge', 'fee', 'atm', 'amazon', 'chipotle', 
-        'staterbros', 'gas', 'fuel', 'restaurant', 'grocery', 'shopping', 'payment'
-      ]
-      const isExpense = expenseKeywords.some(keyword => 
-        description.toLowerCase().includes(keyword)
-      )
-      
-      if (isExpense && amount > 0) {
-        amount = -Math.abs(amount) // Make expense negative
-        console.log('Expense detected, making amount negative:', amount)
-      }
-      
-      console.log('Final amount for:', description, {
-        finalAmount: amount,
-        isIncome: amount > 0,
-        isExpense: amount < 0
-      })
+  // Smart amount correction based on CSV format analysis
+  if (csvFormatAnalysis && description) {
+    console.log('Smart amount processing for:', description, {
+      originalAmount: amountStr,
+      parsedAmount: amount,
+      csvFormat: csvFormatAnalysis
+    })
+    
+    // Check if this transaction should be an expense (negative)
+    const isExpense = csvFormatAnalysis.expensePatterns.some(keyword => 
+      description.toLowerCase().includes(keyword)
+    )
+    
+    // Check if this transaction should be income (positive)
+    const isIncome = csvFormatAnalysis.incomePatterns.some(keyword => 
+      description.toLowerCase().includes(keyword)
+    )
+    
+    // Apply smart correction
+    if (isExpense && amount > 0) {
+      amount = -Math.abs(amount)
+      console.log('Smart correction: Expense detected, making negative:', amount)
+    } else if (isIncome && amount < 0) {
+      amount = Math.abs(amount)
+      console.log('Smart correction: Income detected, making positive:', amount)
     }
+    
+    console.log('Final smart amount for:', description, {
+      finalAmount: amount,
+      isIncome: amount > 0,
+      isExpense: amount < 0
+    })
+  }
   
   return amount
 }
@@ -210,7 +274,7 @@ function parseDateWithFormat(dateString: string, format: string): Date | null {
   return null
 }
 
-function transformRecord(record: Record<string, string>, mapping: Record<string, string>): ParsedTransaction {
+function transformRecord(record: Record<string, string>, mapping: Record<string, string>, headers?: string[]): ParsedTransaction {
   try {
     console.log('transformRecord: Starting transformation with record:', record)
     console.log('transformRecord: Using mapping:', mapping)
@@ -297,7 +361,7 @@ function transformRecord(record: Record<string, string>, mapping: Record<string,
     let amount: number
     try {
       const description = transformed.description || transformed.merchant || 'Unknown transaction'
-      amount = normalizeAmount(amountValue, description)
+      amount = normalizeAmount(amountValue, description, record, headers)
       console.log('transformRecord: Parsed amount:', amount)
     } catch (error) {
       console.error('transformRecord: Failed to parse amount:', amountValue, error)
@@ -386,6 +450,9 @@ export async function parseCSV(csvContent: string): Promise<ParsedTransaction[]>
           reject(new Error(`No required fields found. Available headers: ${headers.join(', ')}. Expected at least: date, description, amount`))
           return
         }
+        
+        // Analyze CSV format to understand the data structure
+        analyzeCSVFormat(records as Record<string, string>[], headers)
 
         for (let i = 0; i < records.length; i++) {
           const record = records[i]
@@ -397,7 +464,7 @@ export async function parseCSV(csvContent: string): Promise<ParsedTransaction[]>
               continue
             }
 
-            const parsed = transformRecord(record as Record<string, string>, mapping)
+            const parsed = transformRecord(record as Record<string, string>, mapping, headers)
             console.log(`parseCSV: Successfully parsed record ${i + 1}:`, parsed)
             results.push(parsed)
           } catch (error) {
