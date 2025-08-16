@@ -69,24 +69,30 @@ function detectFieldMapping(headers: string[]): Record<string, string> {
 }
 
 function normalizeAmount(amountStr: string, description?: string): number {
+  console.log('normalizeAmount: Starting with amountStr:', amountStr, 'description:', description)
+  
   // Remove currency symbols and thousand separators
   let cleaned = amountStr.replace(/[$,€£¥]/g, '')
+  console.log('normalizeAmount: After currency cleanup:', cleaned)
   
   // Handle parentheses for negative amounts
   let isNegative = false
   if (cleaned.includes('(') && cleaned.includes(')')) {
     isNegative = true
     cleaned = cleaned.replace(/[()]/g, '')
+    console.log('normalizeAmount: Found parentheses, marking as negative')
   }
   
   // Handle negative signs
   if (cleaned.startsWith('-')) {
     isNegative = true
     cleaned = cleaned.substring(1)
+    console.log('normalizeAmount: Found negative sign, marking as negative')
   }
   
   // Parse the number
   let amount = parseFloat(cleaned)
+  console.log('normalizeAmount: Parsed number:', amount)
   
   if (isNaN(amount)) {
     throw new Error(`Unable to parse amount: ${amountStr}`)
@@ -95,6 +101,7 @@ function normalizeAmount(amountStr: string, description?: string): number {
   // Apply sign based on parentheses/negative signs
   if (isNegative) {
     amount = -Math.abs(amount)
+    console.log('normalizeAmount: Applied negative sign:', amount)
   }
   
       // Enhanced logic for income/expense detection based on description
@@ -248,17 +255,24 @@ function transformRecord(record: Record<string, string>, mapping: Record<string,
     
     // Handle debit/credit format
     let amountValue = transformed.amount
+    console.log('transformRecord: Initial amount value:', amountValue)
+    console.log('transformRecord: All record fields:', Object.keys(record))
+    console.log('transformRecord: Record values:', record)
+    
     if (!amountValue) {
       // Check if we have separate debit and credit fields
       const debitValue = record['Debit'] || record['debit']
       const creditValue = record['Credit'] || record['credit']
       
+      console.log('transformRecord: Debit value:', debitValue)
+      console.log('transformRecord: Credit value:', creditValue)
+      
       if (debitValue && debitValue.trim() !== '') {
-        amountValue = `-${debitValue}` // Debit is negative
+        amountValue = `-${debitValue}` // Debit is negative (expense)
         console.log('transformRecord: Using debit value:', amountValue)
       } else if (creditValue && creditValue.trim() !== '') {
-        amountValue = creditValue // Credit is positive
-        console.log('transformRecord: Using credit value:', amountValue)
+        amountValue = `-${creditValue}` // Credit in bank statements is usually negative (expense)
+        console.log('transformRecord: Using credit value as negative expense:', amountValue)
       }
     }
     

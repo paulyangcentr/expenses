@@ -41,3 +41,4 @@ echo "3. Generate an App Password"
 echo "4. Update EMAIL_SERVER_USER and EMAIL_SERVER_PASSWORD in Vercel dashboard"
 echo ""
 echo "Or you can run: vercel env pull to download the current environment variables"
+

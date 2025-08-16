@@ -685,7 +685,7 @@ export function CategoryBreakdown() {
             categorizationLog.push({
               description: description,
               category: categoryName,
-              amount: Math.abs(transaction.amount)
+              amount: transaction.amount // Show actual amount (negative for expenses)
             })
           })
           

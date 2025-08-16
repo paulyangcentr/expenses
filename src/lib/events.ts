@@ -37,3 +37,4 @@ export const EVENTS = {
   CATEGORIES_UPDATED: 'categories_updated',
   ACCOUNTS_UPDATED: 'accounts_updated'
 } as const
+

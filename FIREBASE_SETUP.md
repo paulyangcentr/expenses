@@ -198,3 +198,4 @@ Firebase has a generous free tier:
 - **Hosting**: 10GB storage, 360MB/day transfer
 
 Perfect for personal use and small teams!
+

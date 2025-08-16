@@ -4,3 +4,4 @@ date,description,merchant,amount,currency,account,category,tags,externalId
 2024-01-17,Gas station fill up,Shell,-45.00,USD,Main Checking,Transportation,fuel,shell-001
 2024-01-18,Salary deposit,Employer,3000.00,USD,Main Checking,Income,salary,emp-001
 2024-01-19,Coffee at Starbucks,Starbucks,-4.50,USD,Credit Card,Dining,coffee,sb-001
+

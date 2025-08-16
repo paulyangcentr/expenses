@@ -213,6 +213,19 @@ export function CSVUpload() {
       console.log('parseCSV returned:', parsedData)
       console.log('Parsed data length:', parsedData.length)
       
+      // Debug: Check the first few transactions for amount values
+      if (parsedData.length > 0) {
+        console.log('First 3 parsed transactions with amounts:')
+        parsedData.slice(0, 3).forEach((transaction, index) => {
+          console.log(`Transaction ${index + 1}:`, {
+            description: transaction.description,
+            amount: transaction.amount,
+            isNegative: transaction.amount < 0,
+            isPositive: transaction.amount > 0
+          })
+        })
+      }
+      
       if (parsedData.length === 0) {
         // Try simple fallback parsing
         console.log('Trying fallback CSV parsing...')
