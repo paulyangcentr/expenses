@@ -50,12 +50,25 @@ function detectFieldMapping(headers: string[]): Record<string, string> {
   console.log('detectFieldMapping: Starting with headers:', headers)
   const mapping: Record<string, string> = {}
   
+  // Check if we have separate Debit/Credit columns
+  const hasDebitColumn = headers.some(h => h.toLowerCase().includes('debit'))
+  const hasCreditColumn = headers.some(h => h.toLowerCase().includes('credit'))
+  
+  if (hasDebitColumn && hasCreditColumn) {
+    console.log('detectFieldMapping: Found separate Debit/Credit columns - will handle dynamically')
+    // Don't map amount field yet - we'll handle it dynamically per record
+  }
+  
   headers.forEach(header => {
     const normalizedHeader = header.toLowerCase().trim()
     console.log('detectFieldMapping: Processing header:', header, 'normalized to:', normalizedHeader)
     
-    // Find matching field
+    // Find matching field (but skip amount if we have separate debit/credit)
     for (const [field, identifiers] of Object.entries(FIELD_MAPPINGS)) {
+      if (field === 'amount' && hasDebitColumn && hasCreditColumn) {
+        // Skip amount mapping - we'll handle it dynamically
+        continue
+      }
       if (identifiers.some(id => normalizedHeader.includes(id))) {
         mapping[field] = header
         console.log('detectFieldMapping: Mapped', field, 'to', header)
@@ -323,19 +336,29 @@ function transformRecord(record: Record<string, string>, mapping: Record<string,
     console.log('transformRecord: All record fields:', Object.keys(record))
     console.log('transformRecord: Record values:', record)
     
-    if (!amountValue) {
-      // Check if we have separate debit and credit fields
-      const debitValue = record['Debit'] || record['debit']
-      const creditValue = record['Credit'] || record['credit']
+    // Check if we have separate debit and credit fields
+    const debitValue = record['Debit'] || record['debit']
+    const creditValue = record['Credit'] || record['credit']
+    
+    console.log('transformRecord: Debit value:', debitValue)
+    console.log('transformRecord: Credit value:', creditValue)
+    
+    // If we have separate debit/credit columns, use the appropriate one
+    if (debitValue && debitValue.trim() !== '') {
+      amountValue = `-${debitValue}` // Debit is negative (expense)
+      console.log('transformRecord: Using debit value:', amountValue)
+    } else if (creditValue && creditValue.trim() !== '') {
+      // For credits, we need to determine if it's income or expense based on description
+      const description = transformed.description || transformed.merchant || 'Unknown transaction'
+      const isIncome = ['deposit', 'salary', 'income', 'refund', 'transfer in', 'ach credit', 'merchant offers credit', 'cashback', 'reward', 'bonus'].some(keyword => 
+        description.toLowerCase().includes(keyword)
+      )
       
-      console.log('transformRecord: Debit value:', debitValue)
-      console.log('transformRecord: Credit value:', creditValue)
-      
-      if (debitValue && debitValue.trim() !== '') {
-        amountValue = `-${debitValue}` // Debit is negative (expense)
-        console.log('transformRecord: Using debit value:', amountValue)
-      } else if (creditValue && creditValue.trim() !== '') {
-        amountValue = `-${creditValue}` // Credit in bank statements is usually negative (expense)
+      if (isIncome) {
+        amountValue = creditValue // Credit income is positive
+        console.log('transformRecord: Using credit value as positive income:', amountValue)
+      } else {
+        amountValue = `-${creditValue}` // Credit expense is negative
         console.log('transformRecord: Using credit value as negative expense:', amountValue)
       }
     }
